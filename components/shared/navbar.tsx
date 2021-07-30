@@ -95,21 +95,6 @@ export const NavbarComponent = ({
                                   <Anchor>Subledger</Anchor>
                                 </Link>
                               </Dropdown.Item>
-                              <Dropdown.Item>
-                                <Link href="/expense/expense-subledger">
-                                  <Anchor>All expenses - subledgers</Anchor>
-                                </Link>
-                              </Dropdown.Item>
-                              <Dropdown.Item>
-                                <Link href="/expense/expense-account">
-                                  <Anchor>All expenses - accounts</Anchor>
-                                </Link>
-                              </Dropdown.Item>
-                              <Dropdown.Item>
-                                <Link href="/expense/expense-location">
-                                  <Anchor>All expenses - locations</Anchor>
-                                </Link>
-                              </Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown.Item>
                         </>
