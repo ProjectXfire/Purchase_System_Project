@@ -10,20 +10,20 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import { parseCookies } from '@utils/parseCookies'
 import { searchItems } from '@utils/searchItems'
 import { sortColumn } from '@utils/sortColumn'
-import { fillDropdownAccount } from '@utils/fillDropdown'
+import { fillDropdown } from '@utils/fillDropdown'
 // Services
 import { createOne, deleteOne, getList, getOne } from '@services/apiRequest'
 // Models
 import { Permissions } from '@models/auth/permission.model'
-import { ContractAccount } from '@models/contract/contract.account.model'
-import { Contract } from '@models/contract/contract.model'
-import { Account } from '@models/account/account.model'
-import { ContractAccountSchema } from '@models/contract/contract.account.schema'
+import { ExpenseSubledger } from '@models/expense/expense.subledger.model'
+import { Expense } from '@models/expense/expense.model'
+import { Subledger } from '@models/expense/subledger.model'
+import { ExpenseSubledgerSchema } from '@models/expense/expense.subledger.schema'
 // Styles
 import { Message } from 'semantic-ui-react'
 // Components
 import { Layout } from '@components/shared/layout'
-import { ContractAccountsComponent } from '@components/contract/account/listbycontract'
+import { SubledgersByExpenseComponent } from '@components/generalexpense/expense-subledger/listbyexpense'
 import { ModalComponent } from '@components/shared/modal'
 import { ModalErrorComponent } from '@components/shared/modalError'
 
@@ -35,21 +35,24 @@ export const getServerSideProps: GetServerSideProps = async (
     const params = ctx.params
     const id = params && params.id ? (params.id as string) : ''
     cookie = parseCookies(ctx)
-    const responseAccountsByContract = await getList(
-      'contract/account/list',
+    const responseSubledgerByExpense = await getList(
+      'expense/expense-subledger/subledgers',
       cookie.token,
       id
     )
-    const responseAccount = await getList('account/dropdown/list', cookie.token)
-    const responseContract = await getOne('contract/read', id, cookie.token)
+    const responseSubledger = await getList(
+      'expense/subledger/list',
+      cookie.token
+    )
+    const responseExpense = await getOne('expense/read', id, cookie.token)
     return {
       props: {
         user: cookie.user,
         token: cookie.token,
         permissions: cookie.permissions,
-        dataAccountsByContract: responseAccountsByContract.data,
-        dataContract: responseContract.data,
-        dataAccounts: responseAccount.data,
+        dataSubledgersByExpense: responseSubledgerByExpense.data,
+        dataExpense: responseExpense.data,
+        dataSubledgers: responseSubledger.data,
         error: ''
       }
     }
@@ -59,46 +62,46 @@ export const getServerSideProps: GetServerSideProps = async (
         user: cookie.user || '',
         token: cookie.token || '',
         permissions: cookie.permissions || '',
-        dataAccountsByContract: [],
-        dataContract: {},
-        dataAccounts: [],
+        dataSubledgersByExpense: [],
+        dataExpense: {},
+        dataSubledgers: [],
         error: error.message
       }
     }
   }
 }
 
-const ContractAccountsPage = ({
+const SubledgersByExpensePage = ({
   user,
   token,
   permissions,
-  dataAccountsByContract,
-  dataContract,
-  dataAccounts,
+  dataSubledgersByExpense,
+  dataExpense,
+  dataSubledgers,
   error
 }: {
   user: string
   token: string
   permissions: Permissions
-  dataAccountsByContract: ContractAccount[]
-  dataContract: Contract
-  dataAccounts: Account[]
+  dataSubledgersByExpense: ExpenseSubledger[]
+  dataExpense: Expense
+  dataSubledgers: Subledger[]
   error: any
 }): React.ReactElement => {
   const router = useRouter()
   const [errorOnRequest, setErrorOnRequest] = useState('')
 
   // SORT DATA SEARCHED
-  const [dataModified, setDataModified] = useState(dataAccountsByContract)
+  const [dataModified, setDataModified] = useState(dataSubledgersByExpense)
 
   // INIT DROPDOWN VALUES
-  const accountDropdown = fillDropdownAccount(dataAccounts)
+  const subledgerDropdown = fillDropdown(dataSubledgers)
 
   const {
     formState: { errors },
     handleSubmit,
     setValue
-  } = useForm({ resolver: joiResolver(ContractAccountSchema) })
+  } = useForm({ resolver: joiResolver(ExpenseSubledgerSchema) })
 
   // SEARCH ITEM
   const [searchInputValue, setSearchInputValue] = useState('')
@@ -106,18 +109,7 @@ const ContractAccountsPage = ({
     const value = e.target.value
     setSearchInputValue(value)
     setDataModified(
-      searchItems(
-        dataAccountsByContract,
-        [
-          'account.costcode.name',
-          'account.costcode.description',
-          'account.costtype.name',
-          'account.costtype.description',
-          'account.budget.name',
-          'account.budget.description'
-        ],
-        value
-      )
+      searchItems(dataSubledgersByExpense, ['subledger.name'], value)
     )
   }
 
@@ -129,7 +121,7 @@ const ContractAccountsPage = ({
   // CREATE NEW ITEM
   const addItem = async (data: Record<string, unknown>) => {
     try {
-      await createOne('contract/account/create', data, token)
+      await createOne('expense/expense-subledger/create', data, token)
       window.location.reload()
     } catch (error: any) {
       setErrorOnRequest(error.message)
@@ -148,7 +140,11 @@ const ContractAccountsPage = ({
   })
   const deleteItem = async () => {
     try {
-      await deleteOne('contract/account/delete', selectedItem.itemId, token)
+      await deleteOne(
+        'expense/expense-subledger/delete',
+        selectedItem.itemId,
+        token
+      )
       setSelectedItem({
         itemId: '',
         itemName: ''
@@ -169,7 +165,7 @@ const ContractAccountsPage = ({
     if (!user) {
       router.push('/auth/login')
     }
-    setValue('contract', dataContract._id, {
+    setValue('expense', dataExpense._id, {
       shouldValidate: true
     })
   }, [])
@@ -177,7 +173,7 @@ const ContractAccountsPage = ({
   return (
     <>
       <Head>
-        <title>Contract - Accounts</title>
+        <title>Expense - Subledger</title>
         <meta name="description" content="Expense" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -186,14 +182,14 @@ const ContractAccountsPage = ({
           <>
             <main>
               {!error ? (
-                <ContractAccountsComponent
+                <SubledgersByExpenseComponent
                   validateHandleSubmit={handleSubmit}
                   validateSetValue={setValue}
                   validateErrors={errors}
                   permissions={permissions}
-                  dataContract={dataContract}
+                  dataExpense={dataExpense}
                   tableData={dataModified}
-                  accountDropdown={accountDropdown}
+                  subledgerDropdown={subledgerDropdown}
                   searchInputValue={searchInputValue}
                   handleSearchedValues={handleSearchedValues}
                   sortByColumn={sortByColumn}
@@ -231,4 +227,4 @@ const ContractAccountsPage = ({
   )
 }
 
-export default ContractAccountsPage
+export default SubledgersByExpensePage

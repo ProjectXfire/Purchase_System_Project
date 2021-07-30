@@ -18,6 +18,15 @@ export const searchItems = (
           return true
         }
       }
+      if (props.length === 3) {
+        if (
+          item[props[0]][props[1]][props[2]]
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        ) {
+          return true
+        }
+      }
     }
     return false
   })

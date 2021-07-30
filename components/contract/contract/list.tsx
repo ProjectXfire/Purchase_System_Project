@@ -93,6 +93,7 @@ export const ContractListComponent = ({
               <HeaderTitle>Contract Type</HeaderTitle>
             </Table.HeaderCell>
             <Table.HeaderCell>Actions</Table.HeaderCell>
+            <Table.HeaderCell>Assign</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -133,6 +134,11 @@ export const ContractListComponent = ({
                     <Icon name="trash" />
                   </Button>
                 )}
+              </Table.Cell>
+              <Table.Cell>
+                <Link href={`/contract/accounts/${value._id}`}>
+                  <Button color="blue">Accounts</Button>
+                </Link>
               </Table.Cell>
             </Table.Row>
           ))}
