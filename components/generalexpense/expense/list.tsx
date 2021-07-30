@@ -114,13 +114,13 @@ export const ExpenseListComponent = ({
                 )}
               </Table.Cell>
               <Table.Cell>
-                <Link href={`/expense/expense-location/list/${value._id}`}>
+                <Link href={`/expense/locations/${value._id}`}>
                   <Button color="blue">Location</Button>
                 </Link>
-                <Link href={`/expense/expense-account/list/${value._id}`}>
+                <Link href={`/expense/accounts/${value._id}`}>
                   <Button color="blue">Account</Button>
                 </Link>
-                <Link href={`/expense/expense-subledger/list/${value._id}`}>
+                <Link href={`/expense/subledgers/${value._id}`}>
                   <Button color="blue">Subledger</Button>
                 </Link>
               </Table.Cell>
