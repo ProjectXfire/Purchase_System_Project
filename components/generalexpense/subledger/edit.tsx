@@ -79,9 +79,9 @@ export const SubledgerEditComponent = ({
         <Button type="submit" color="blue">
           Save
         </Button>
-        <Button>
-          <Link href="/expense/subledger">Back</Link>
-        </Button>
+        <Link href="/expense/subledger">
+          <Button type="button">Back</Button>
+        </Link>
       </Form>
     </>
   )

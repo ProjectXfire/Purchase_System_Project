@@ -37,7 +37,7 @@ export const LocationDetailComponent = ({
         </Table.Body>
       </Table>
       <Link href="/contract/location">
-        <Button>Back</Button>
+        <Button type="button">Back</Button>
       </Link>
     </>
   )

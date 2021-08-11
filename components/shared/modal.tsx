@@ -3,39 +3,48 @@ import React from 'react'
 import { Modal, Button, Header } from 'semantic-ui-react'
 
 export const ModalComponent = ({
-  showModal = false,
-  setShowModal,
+  open,
+  setOpen,
   message,
-  headerText,
-  deleteAction,
-  deleteItemText
+  setValue,
+  acceptButton,
+  action
 }: {
-  showModal?: boolean
-  setShowModal: (value: boolean) => void
+  open: boolean
+  setOpen: any
   message?: string
-  headerText?: string
-  deleteAction: () => void
-  deleteItemText?: string
+  setValue: any
+  acceptButton?: boolean
+  action: () => void
 }): React.ReactElement => {
   return (
     <Modal
-      open={showModal}
-      onOpen={() => setShowModal(true)}
-      onClose={() => setShowModal(false)}
-      closeOnEscape={showModal}
-      closeOnDimmerClick={showModal}
+      open={open}
+      onClose={() => setOpen(false)}
+      onOpen={() => setOpen(true)}
     >
-      <Header icon="trash" content={headerText} />
-      <Modal.Content>
-        <p>{message}</p>
-        <strong>{deleteItemText}</strong>
-      </Modal.Content>
+      <Header icon="star" content="Status" />
+      <Modal.Content>{message}</Modal.Content>
       <Modal.Actions>
-        <Button negative onClick={() => setShowModal(false)}>
-          No
-        </Button>
-        <Button positive onClick={() => deleteAction()}>
-          Yes
+        {acceptButton && (
+          <Button
+            color="green"
+            onClick={() => {
+              setOpen(false)
+              action()
+            }}
+          >
+            Accept
+          </Button>
+        )}
+        <Button
+          color="red"
+          onClick={() => {
+            setOpen(false)
+            setValue('createdByStatus', 'Open')
+          }}
+        >
+          Cancel
         </Button>
       </Modal.Actions>
     </Modal>

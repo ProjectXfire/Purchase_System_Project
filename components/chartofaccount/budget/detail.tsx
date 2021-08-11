@@ -33,7 +33,7 @@ export const BudgetDetailComponent = ({
         </Table.Body>
       </Table>
       <Link href="/chartofaccount/budget">
-        <Button>Back</Button>
+        <Button type="button">Back</Button>
       </Link>
     </>
   )

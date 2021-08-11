@@ -30,49 +30,38 @@ export const getListSSR = async (
   path: string,
   ctx: GetServerSidePropsContext
 ): Promise<ResponseList> => {
-  if (parseCookies(ctx)) {
-    const cookie: Cookie = parseCookies(ctx)
-    const params = ctx.params
-    const id = params && params.id ? (params.id as string) : ''
-    try {
-      const response = await getList(path, cookie.token, id)
-      if (!id) {
-        return {
-          user: cookie.user,
-          token: cookie.token,
-          permissions: cookie.permissions,
-          data: response.data.list,
-          pages: response.data.pages,
-          error: ''
-        }
-      }
+  const cookie: Cookie = parseCookies(ctx)
+  const params = ctx.params
+  const id = params && params.id ? (params.id as string) : ''
+  try {
+    const response = await getList(path, cookie.token, id)
+    if (!id) {
       return {
         user: cookie.user,
         token: cookie.token,
         permissions: cookie.permissions,
-        data: response.data,
-        pages: 0,
+        data: response.data.list,
+        pages: response.data.pages,
         error: ''
       }
-    } catch (error: any) {
-      console.log(error)
-      return {
-        user: cookie.user,
-        token: cookie.token,
-        permissions: cookie.permissions,
-        data: [],
-        pages: 0,
-        error: error.message
-      }
     }
-  }
-  return {
-    token: '',
-    user: '',
-    permissions: {},
-    data: [],
-    pages: 0,
-    error: ''
+    return {
+      user: cookie.user,
+      token: cookie.token,
+      permissions: cookie.permissions,
+      data: response.data,
+      pages: 0,
+      error: ''
+    }
+  } catch (error: any) {
+    return {
+      user: cookie.user || '',
+      token: cookie.token || '',
+      permissions: cookie.permissions || '',
+      data: [],
+      pages: 0,
+      error: error.message
+    }
   }
 }
 
@@ -81,34 +70,26 @@ export const getOneSSR = async (
   ctx: GetServerSidePropsContext
 ): Promise<ResponseOne> => {
   const params = ctx.params
-  if (parseCookies(ctx)) {
-    const cookie: Cookie = parseCookies(ctx)
-    const id = params && params.id ? (params.id as string) : ''
-    try {
-      const response = await getOne(path, id, cookie.token)
-      return {
-        data: response.data,
-        user: cookie.user,
-        token: cookie.token,
-        permissions: cookie.permissions,
-        error: ''
-      }
-    } catch (error: any) {
-      return {
-        data: {},
-        user: cookie.user,
-        token: cookie.token,
-        permissions: cookie.permissions,
-        error: error.message
-      }
+
+  const cookie: Cookie = parseCookies(ctx)
+  const id = params && params.id ? (params.id as string) : ''
+  try {
+    const response = await getOne(path, id, cookie.token)
+    return {
+      data: response.data,
+      user: cookie.user,
+      token: cookie.token,
+      permissions: cookie.permissions,
+      error: ''
     }
-  }
-  return {
-    data: {},
-    user: '',
-    token: '',
-    permissions: {},
-    error: ''
+  } catch (error: any) {
+    return {
+      data: {},
+      user: cookie.user || '',
+      token: cookie.token || '',
+      permissions: cookie.permissions || '',
+      error: error.message
+    }
   }
 }
 

@@ -163,9 +163,9 @@ export const ContractCreateComponent = ({
         <Button type="submit" color="blue">
           Save
         </Button>
-        <Button>
-          <Link href="/contract">Back</Link>
-        </Button>
+        <Link href="/contract">
+          <Button type="button">Back</Button>
+        </Link>
       </Form>
     </>
   )

@@ -100,7 +100,7 @@ export const LocationListComponent = ({
                     </Button>
                   </Link>
                 )}
-                {(permissions.admin || permissions.contract_remove) && (
+                {(permissions.admin || permissions.contract_delete) && (
                   <Button
                     icon
                     color="red"

@@ -96,9 +96,9 @@ export const LocationEditComponent = ({
         <Button type="submit" color="blue">
           Save
         </Button>
-        <Button type="submit">
-          <Link href="/contract/location">Back</Link>
-        </Button>
+        <Link href="/contract/location">
+          <Button type="button">Back</Button>
+        </Link>
       </Form>
     </>
   )

@@ -24,7 +24,7 @@ import { Message } from 'semantic-ui-react'
 // Components
 import { Layout } from '@components/shared/layout'
 import { AccountsByExpenseComponent } from '@components/generalexpense/expense-account/listbyexpense'
-import { ModalComponent } from '@components/shared/modal'
+import { ModalDeleteComponent } from '@components/shared/modalDelete'
 import { ModalErrorComponent } from '@components/shared/modalError'
 
 export const getServerSideProps: GetServerSideProps = async (
@@ -164,10 +164,9 @@ const AccountsByExpensePage = ({
   useEffect(() => {
     if (!user) {
       router.push('/auth/login')
+    } else {
+      setValue('expense', dataExpense._id)
     }
-    setValue('expense', dataExpense._id, {
-      shouldValidate: true
-    })
   }, [])
 
   return (
@@ -207,7 +206,7 @@ const AccountsByExpensePage = ({
                 />
               )}
             </main>
-            <ModalComponent
+            <ModalDeleteComponent
               showModal={showModal}
               setShowModal={setShowModal}
               headerText="Delete"

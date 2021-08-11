@@ -16,15 +16,15 @@ import { Message } from 'semantic-ui-react'
 // Components
 import { Layout } from '@components/shared/layout'
 import { BudgetListComponent } from '@components/chartofaccount/budget/list'
-import { ModalComponent } from '@components/shared/modal'
+import { ModalDeleteComponent } from '@components/shared/modalDelete'
 import { ModalErrorComponent } from '@components/shared/modalError'
 
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
-  const res = await getListSSR('account/budget/list?page=1', ctx)
+  const response = await getListSSR('account/budget/list?page=1', ctx)
   return {
-    props: res
+    props: response
   }
 }
 
@@ -144,7 +144,7 @@ const BudgetListPage = ({
                 />
               )}
             </main>
-            <ModalComponent
+            <ModalDeleteComponent
               showModal={showModal}
               setShowModal={setShowModal}
               headerText="Delete"

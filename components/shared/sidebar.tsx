@@ -106,39 +106,59 @@ export const SidebarComponent = ({
         <Dropdown text="Requisition" item>
           <Dropdown.Menu>
             <Dropdown.Item>
-              <Link href="/">
+              <Link href="/requisition">
                 <Anchor>Requisition</Anchor>
               </Link>
             </Dropdown.Item>
             <Dropdown.Item>
-              <Link href="/">
+              <Link href="/requisition/shipto">
                 <Anchor>Ship to</Anchor>
               </Link>
             </Dropdown.Item>
             <Dropdown.Item>
-              <Link href="/">
+              <Link href="/requisition/shipby">
                 <Anchor>Ship by</Anchor>
               </Link>
             </Dropdown.Item>
             <Dropdown.Item>
-              <Link href="/">
+              <Link href="/requisition/requestor">
                 <Anchor>Requestor</Anchor>
               </Link>
             </Dropdown.Item>
             <Dropdown.Item>
-              <Link href="/">
+              <Link href="/requisition/currency">
                 <Anchor>Currency</Anchor>
+              </Link>
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <Link href="/requisition/priority">
+                <Anchor>Priority</Anchor>
+              </Link>
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <Link href="/requisition/status/creator">
+                <Anchor>Creator Status</Anchor>
+              </Link>
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <Link href="/requisition/status/approver">
+                <Anchor>Approver Status</Anchor>
               </Link>
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       )}
       {permissions.admin && (
-        <Dropdown text="Product" item>
+        <Dropdown text="Items" item>
           <Dropdown.Menu>
             <Dropdown.Item>
-              <Link href="/">
+              <Link href="/inventory/product">
                 <Anchor>Product</Anchor>
+              </Link>
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <Link href="/inventory/category">
+                <Anchor>Category</Anchor>
               </Link>
             </Dropdown.Item>
           </Dropdown.Menu>

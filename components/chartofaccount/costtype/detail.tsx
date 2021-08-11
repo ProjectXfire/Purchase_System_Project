@@ -39,7 +39,7 @@ export const CostTypeDetailComponent = ({
         </Table.Body>
       </Table>
       <Link href="/chartofaccount/costtype">
-        <Button>Back</Button>
+        <Button type="button">Back</Button>
       </Link>
     </>
   )

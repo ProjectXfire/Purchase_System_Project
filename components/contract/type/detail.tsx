@@ -33,7 +33,7 @@ export const ContractTypeDetailComponent = ({
         </Table.Body>
       </Table>
       <Link href="/contract/type">
-        <Button>Back</Button>
+        <Button type="button">Back</Button>
       </Link>
     </>
   )

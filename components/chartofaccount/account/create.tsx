@@ -96,9 +96,9 @@ export const AccountCreateComponent = ({
         <Button type="submit" color="blue">
           Save
         </Button>
-        <Button>
-          <Link href="/chartofaccount/account">Back</Link>
-        </Button>
+        <Link href="/chartofaccount/account">
+          <Button type="button">Back</Button>
+        </Link>
       </Form>
     </>
   )

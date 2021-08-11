@@ -96,9 +96,9 @@ export const LocationCreateComponent = ({
         <Button type="submit" color="blue">
           Save
         </Button>
-        <Button>
-          <Link href="/contract/location">Back</Link>
-        </Button>
+        <Link href="/contract/location">
+          <Button type="button">Back</Button>
+        </Link>
       </Form>
     </>
   )

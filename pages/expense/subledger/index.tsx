@@ -16,7 +16,7 @@ import { Message } from 'semantic-ui-react'
 // Components
 import { Layout } from '@components/shared/layout'
 import { SubledgerListComponent } from '@components/generalexpense/subledger/list'
-import { ModalComponent } from '@components/shared/modal'
+import { ModalDeleteComponent } from '@components/shared/modalDelete'
 import { ModalErrorComponent } from '@components/shared/modalError'
 
 export const getServerSideProps: GetServerSideProps = async (
@@ -145,7 +145,7 @@ const SubledgerListPage = ({
                 />
               )}
             </main>
-            <ModalComponent
+            <ModalDeleteComponent
               showModal={showModal}
               setShowModal={setShowModal}
               headerText="Delete"

@@ -99,9 +99,9 @@ export const CostTypeEditComponent = ({
         <Button type="submit" color="blue">
           Save
         </Button>
-        <Button type="submit">
-          <Link href="/chartofaccount/costtype">Back</Link>
-        </Button>
+        <Link href="/chartofaccount/costtype">
+          <Button type="button">Back</Button>
+        </Link>
       </Form>
     </>
   )

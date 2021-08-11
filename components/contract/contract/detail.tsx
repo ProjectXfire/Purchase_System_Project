@@ -53,7 +53,7 @@ export const ContractDetailComponent = ({
         </Table.Body>
       </Table>
       <Link href="/contract">
-        <Button>Back</Button>
+        <Button type="button">Back</Button>
       </Link>
     </>
   )

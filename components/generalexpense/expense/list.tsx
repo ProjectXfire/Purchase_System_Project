@@ -97,7 +97,7 @@ export const ExpenseListComponent = ({
                     </Button>
                   </Link>
                 )}
-                {(permissions.admin || permissions.expense_remove) && (
+                {(permissions.admin || permissions.expense_delete) && (
                   <Button
                     icon
                     color="red"

@@ -79,9 +79,9 @@ export const ContractTypeEditComponent = ({
         <Button type="submit" color="blue">
           Save
         </Button>
-        <Button>
-          <Link href="/contract/type">Back</Link>
-        </Button>
+        <Link href="/contract/type">
+          <Button type="button">Back</Button>
+        </Link>
       </Form>
     </>
   )

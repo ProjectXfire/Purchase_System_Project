@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 4001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 4001",
     "lint": "next lint",
     "format": "prettier --write \"./**/*.ts\" \"./**/*.tsx\" \"./**/*.jsx\" \"./**/*.ts\""
   },
@@ -15,6 +15,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^5.0.2",
     "cookie": "^0.4.1",
+    "dateformat": "^4.5.1",
     "joi": "^17.4.1",
     "js-cookie": "^2.2.1",
     "next": "11.0.1",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@types/cookie": "^0.4.1",
+    "@types/dateformat": "^3.0.1",
     "@types/js-cookie": "^2.2.7",
     "@types/react": "17.0.14",
     "@types/react-responsive": "^8.0.3",

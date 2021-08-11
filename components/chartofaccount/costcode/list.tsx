@@ -96,7 +96,7 @@ export const CostCodeListComponent = ({
                     </Button>
                   </Link>
                 )}
-                {(permissions.admin || permissions.account_remove) && (
+                {(permissions.admin || permissions.account_delete) && (
                   <Button
                     icon
                     color="red"

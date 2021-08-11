@@ -102,7 +102,7 @@ export const ContractAccountsComponent = ({
                     ${value.account.budget.name} ${value.account.budget.description}`}
                 </Table.Cell>
                 <Table.Cell>
-                  {(permissions.admin || permissions.expense_remove) && (
+                  {(permissions.admin || permissions.expense_delete) && (
                     <Button
                       icon
                       color="red"
@@ -153,9 +153,9 @@ export const ContractAccountsComponent = ({
         <Button type="submit" color="blue">
           Add
         </Button>
-        <Button>
-          <Link href="/contract">Back</Link>
-        </Button>
+        <Link href="/contract">
+          <Button type="button">Back</Button>
+        </Link>
       </Form>
     </>
   )

@@ -38,3 +38,14 @@ export const HeaderBold = styled.p`
   font-weight: 900;
   color: #bdbdbd;
 `
+
+export const TableContainer = styled.div`
+  font-size: 0.8rem;
+  display: block;
+  min-width: 1px;
+  overflow: scroll;
+`
+export const TitleLabel = styled.label`
+  font-weight: bolder;
+  font-size: 1.5rem;
+`

@@ -33,7 +33,7 @@ export const CostCodeDetailComponent = ({
         </Table.Body>
       </Table>
       <Link href="/chartofaccount/costcode">
-        <Button>Back</Button>
+        <Button type="button">Back</Button>
       </Link>
     </>
   )

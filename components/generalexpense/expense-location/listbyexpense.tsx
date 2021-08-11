@@ -96,7 +96,7 @@ export const LocationsByExpenseComponent = ({
                 </Table.Cell>
                 <Table.Cell>{value.location.name}</Table.Cell>
                 <Table.Cell>
-                  {(permissions.admin || permissions.expense_remove) && (
+                  {(permissions.admin || permissions.expense_delete) && (
                     <Button
                       icon
                       color="red"
@@ -146,9 +146,9 @@ export const LocationsByExpenseComponent = ({
         <Button type="submit" color="blue">
           Add
         </Button>
-        <Button>
-          <Link href="/expense">Back</Link>
-        </Button>
+        <Link href="/expense">
+          <Button type="button">Back</Button>
+        </Link>
       </Form>
     </>
   )

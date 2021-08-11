@@ -21,23 +21,16 @@ import { LoginComponent } from '@components/auth/Login'
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
+  let cookie: Cookie
   try {
-    let cookie: Cookie
-    if (parseCookies(ctx)) {
-      cookie = parseCookies(ctx)
-      return {
-        props: {
-          user: cookie.user
-        }
-      }
-    }
+    cookie = parseCookies(ctx)
+    console.log(cookie)
     return {
       props: {
-        user: null
+        user: cookie.user
       }
     }
   } catch (error: any) {
-    console.log(error.message)
     return {
       props: {
         user: null

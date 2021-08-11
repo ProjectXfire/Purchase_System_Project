@@ -19,7 +19,8 @@
       "@utils/*": ["utils/*"],
       "@models/*": ["models/*"],
       "@styles/*": ["styles/*"],
-      "@services/*": ["services/*"]
+      "@services/*": ["services/*"],
+      "@contextProvider/*": ["globalStates/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

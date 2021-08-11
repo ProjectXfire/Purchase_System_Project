@@ -16,7 +16,7 @@ import { Message } from 'semantic-ui-react'
 // Components
 import { Layout } from '@components/shared/layout'
 import { AccountListComponent } from '@components/chartofaccount/account/list'
-import { ModalComponent } from '@components/shared/modal'
+import { ModalDeleteComponent } from '@components/shared/modalDelete'
 import { ModalErrorComponent } from '@components/shared/modalError'
 
 export const getServerSideProps: GetServerSideProps = async (
@@ -154,7 +154,7 @@ const AccountListPage = ({
                 />
               )}
             </main>
-            <ModalComponent
+            <ModalDeleteComponent
               showModal={showModal}
               setShowModal={setShowModal}
               headerText="Delete"

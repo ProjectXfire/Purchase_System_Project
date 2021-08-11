@@ -79,9 +79,9 @@ export const ExpenseCreateComponent = ({
         <Button type="submit" color="blue">
           Save
         </Button>
-        <Button>
-          <Link href="/expense">Back</Link>
-        </Button>
+        <Link href="/expense">
+          <Button type="button">Back</Button>
+        </Link>
       </Form>
     </>
   )

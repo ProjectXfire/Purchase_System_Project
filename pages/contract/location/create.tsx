@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
   let cookie: Cookie
-  if (parseCookies(ctx)) {
+  try {
     cookie = parseCookies(ctx)
     return {
       props: {
@@ -33,12 +33,13 @@ export const getServerSideProps: GetServerSideProps = async (
         permissions: cookie.permissions
       }
     }
-  }
-  return {
-    props: {
-      user: '',
-      token: '',
-      permissions: {}
+  } catch (error) {
+    return {
+      props: {
+        user: '',
+        token: '',
+        permissions: {}
+      }
     }
   }
 }

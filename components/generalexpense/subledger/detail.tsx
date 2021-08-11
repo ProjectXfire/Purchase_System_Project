@@ -33,7 +33,7 @@ export const SubledgerDetailComponent = ({
         </Table.Body>
       </Table>
       <Link href="/expense/subledger">
-        <Button>Back</Button>
+        <Button type="button">Back</Button>
       </Link>
     </>
   )

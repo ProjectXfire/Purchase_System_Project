@@ -2,7 +2,7 @@ export interface Cookie {
   token: string
   user: string
   approver: string
-  roles: string
+  roles: []
   locations: []
   permissions: Record<string, unknown>
 }

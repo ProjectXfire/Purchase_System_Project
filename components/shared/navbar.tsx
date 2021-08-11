@@ -146,7 +146,7 @@ export const NavbarComponent = ({
                         <HeaderBold>Requisition Management</HeaderBold>
                       </Dropdown.Header>
                       <Dropdown.Item>
-                        <Link href="/">
+                        <Link href="/requisition">
                           <Anchor>Requisition</Anchor>
                         </Link>
                       </Dropdown.Item>
@@ -155,23 +155,38 @@ export const NavbarComponent = ({
                         <span className="text">Options</span>
                         <Dropdown.Menu>
                           <Dropdown.Item>
-                            <Link href="/">
+                            <Link href="/requisition/shipto">
                               <Anchor>Ship to</Anchor>
                             </Link>
                           </Dropdown.Item>
                           <Dropdown.Item>
-                            <Link href="/">
+                            <Link href="/requisition/shipby">
                               <Anchor>Ship by</Anchor>
                             </Link>
                           </Dropdown.Item>
                           <Dropdown.Item>
-                            <Link href="/">
+                            <Link href="/requisition/requestor">
                               <Anchor>Requestor</Anchor>
                             </Link>
                           </Dropdown.Item>
                           <Dropdown.Item>
-                            <Link href="/">
+                            <Link href="/requisition/currency">
                               <Anchor>Currency</Anchor>
+                            </Link>
+                          </Dropdown.Item>
+                          <Dropdown.Item>
+                            <Link href="/requisition/priority">
+                              <Anchor>Priority</Anchor>
+                            </Link>
+                          </Dropdown.Item>
+                          <Dropdown.Item>
+                            <Link href="/requisition/status/creator">
+                              <Anchor>Creator Status</Anchor>
+                            </Link>
+                          </Dropdown.Item>
+                          <Dropdown.Item>
+                            <Link href="/requisition/status/approver">
+                              <Anchor>Approver Status</Anchor>
                             </Link>
                           </Dropdown.Item>
                         </Dropdown.Menu>
@@ -181,11 +196,16 @@ export const NavbarComponent = ({
                   {permissions.admin && (
                     <>
                       <Dropdown.Header>
-                        <HeaderBold>Products Management</HeaderBold>
+                        <HeaderBold>Items Management</HeaderBold>
                       </Dropdown.Header>
                       <Dropdown.Item>
-                        <Link href="/">
+                        <Link href="/inventory/product">
                           <Anchor>Product</Anchor>
+                        </Link>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <Link href="/inventory/category">
+                          <Anchor>Category</Anchor>
                         </Link>
                       </Dropdown.Item>
                     </>

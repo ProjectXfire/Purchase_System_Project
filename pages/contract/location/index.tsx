@@ -16,7 +16,7 @@ import { Message } from 'semantic-ui-react'
 // Components
 import { Layout } from '@components/shared/layout'
 import { LocationListComponent } from '@components/contract/location/list'
-import { ModalComponent } from '@components/shared/modal'
+import { ModalDeleteComponent } from '@components/shared/modalDelete'
 import { ModalErrorComponent } from '@components/shared/modalError'
 
 export const getServerSideProps: GetServerSideProps = async (
@@ -146,7 +146,7 @@ const LocationListPage = ({
                 />
               )}
             </main>
-            <ModalComponent
+            <ModalDeleteComponent
               showModal={showModal}
               setShowModal={setShowModal}
               headerText="Delete"

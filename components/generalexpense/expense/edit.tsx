@@ -79,9 +79,9 @@ export const ExpenseEditComponent = ({
         <Button type="submit" color="blue">
           Save
         </Button>
-        <Button type="submit">
-          <Link href="/expense">Back</Link>
-        </Button>
+        <Link href="/expense">
+          <Button type="submit">Back</Button>
+        </Link>
       </Form>
     </>
   )
