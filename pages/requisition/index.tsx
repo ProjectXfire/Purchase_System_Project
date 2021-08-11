@@ -188,6 +188,8 @@ const RequisitionListPage = ({
     }
   }, [])
 
+  console.log('hola')
+
   return (
     <>
       <Head>
