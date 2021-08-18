@@ -55,9 +55,9 @@ export const getListSSR = async (
     }
   } catch (error: any) {
     return {
-      user: cookie.user || '',
-      token: cookie.token || '',
-      permissions: cookie.permissions || '',
+      user: cookie && cookie.user ? cookie.user : '',
+      token: cookie && cookie.token ? cookie.token : '',
+      permissions: cookie && cookie.permissions ? cookie.permissions : {},
       data: [],
       pages: 0,
       error: error.message
@@ -85,9 +85,9 @@ export const getOneSSR = async (
   } catch (error: any) {
     return {
       data: {},
-      user: cookie.user || '',
-      token: cookie.token || '',
-      permissions: cookie.permissions || '',
+      user: cookie && cookie.user ? cookie.user : '',
+      token: cookie && cookie.token ? cookie.token : '',
+      permissions: cookie && cookie.permissions ? cookie.permissions : {},
       error: error.message
     }
   }

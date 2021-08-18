@@ -4,6 +4,12 @@ interface DropdownValues {
   text: string
 }
 
+interface DropdownValuesNumber {
+  key: number
+  value: number
+  text: number
+}
+
 export const fillDropdown = (data: any[]): DropdownValues[] => {
   const dropdownFilled = data.map((value, index) => ({
     key: index,
@@ -18,6 +24,26 @@ export const fillDropdownOnlyName = (data: any[]): DropdownValues[] => {
     key: index,
     value: value._id,
     text: `${value.name}`
+  }))
+  return dropdownFilled
+}
+
+export const fillDropdownOnlyEmail = (data: any[]): DropdownValues[] => {
+  const dropdownFilled = data.map((value, index) => ({
+    key: index,
+    value: value._id,
+    text: `${value.email}`
+  }))
+  return dropdownFilled
+}
+
+export const fillDropdownLocationsApprovers = (
+  data: any[]
+): DropdownValues[] => {
+  const dropdownFilled = data.map((value, index) => ({
+    key: index,
+    value: value.locationId,
+    text: value.locationName
   }))
   return dropdownFilled
 }
@@ -75,8 +101,8 @@ export const approverStatusDropdown = [
   },
   {
     key: 3,
-    value: 'Reject',
-    text: 'Reject'
+    value: 'To approve',
+    text: 'To approve'
   }
 ]
 
@@ -97,6 +123,20 @@ export const categoriesDropdown = [
     text: 'Petty Cash'
   }
 ]
+
+export const fillDropdonwYears = (): DropdownValuesNumber[] => {
+  const baseYear = 2000
+  const getCurrentYear = new Date().getFullYear()
+  const years = []
+  for (let i = 0; i <= getCurrentYear - baseYear; i++) {
+    years.push({
+      key: i,
+      value: i + baseYear,
+      text: i + baseYear
+    })
+  }
+  return years
+}
 
 export const fillDropdownCode = (): DropdownValues[] => {
   const unitcode = []

@@ -1,16 +1,8 @@
-import React, { useEffect, useState } from 'react'
-// Providers
-import { Controller, useForm } from 'react-hook-form'
-import { joiResolver } from '@hookform/resolvers/joi'
-// Models
-import { Product } from '@models/inventory/product.model'
-import { RequisitionItems } from '@models/requisition/requisition.items.model'
-// Schema
-import { RequisitionItemsSchema } from '@models/requisition/requisition.items.schema'
-// Styles
-import { Button, Form, Segment } from 'semantic-ui-react'
-// Components
-import { ItemsListComponent } from '@components/requisition/requisition/items'
+import Link from 'next/link'
+import React from 'react'
+import { Controller } from 'react-hook-form'
+// Provider
+import { Button, Form, Header, Icon, Message, Segment } from 'semantic-ui-react'
 
 interface DropdownValues {
   key: number
@@ -18,72 +10,49 @@ interface DropdownValues {
   text: string
 }
 
-export const BodyRequisitionFormComponent = ({
-  tableData,
-  categoriesDropdown,
+export const RequisitionItemsEditComponent = ({
+  validateControl,
+  validateSetValue,
+  validateGetValues,
+  validateErrors,
+  validateHandleSubmit,
+  requisitionId,
   productsDropdown,
-  products,
-  setShowDeleteModal,
-  setSelectedItem,
-  addSubItems
+  categoriesDropdown,
+  showItemOption,
+  setShowItemOption,
+  setProductData,
+  editItem,
+  error
 }: {
-  tableData: RequisitionItems[]
-  categoriesDropdown: DropdownValues[]
+  validateControl: any
+  validateSetValue: any
+  validateGetValues: any
+  validateErrors: any
+  validateHandleSubmit: any
+  requisitionId: string
   productsDropdown: DropdownValues[]
-  products: Product[]
-  setShowDeleteModal: any
-  setSelectedItem: any
-  addSubItems: (data: Record<string, unknown>) => void
+  categoriesDropdown: DropdownValues[]
+  showItemOption: any
+  setShowItemOption: any
+  setProductData: (id: string) => void
+  editItem: () => void
+  error: string
 }): React.ReactElement => {
-  const [showItemOption, setShowItemOption] = useState({
-    material: false,
-    others: false,
-    description: false,
-    unitMeasure: false
-  })
-
-  // SET SCHEMA TO VALIDATE FORM
-  const {
-    formState: { errors },
-    handleSubmit,
-    setValue,
-    getValues,
-    control
-  } = useForm({ resolver: joiResolver(RequisitionItemsSchema) })
-
-  // COMPLETE PRODUCT DATA
-  const setProductData = (id: string) => {
-    const getProduct = products.find(item => item._id === id)
-    if (getProduct && getProduct._id) {
-      setValue('price', getProduct.unitPrice)
-      setValue('unitMeasure', getProduct.unitMeasure)
-    }
-  }
-
-  useEffect(() => {
-    setValue('itemCategory', null)
-    setValue('material', null)
-    setValue('other', '')
-    setValue('description', '')
-    setValue('unitMeasure', '')
-    setValue('price', 0)
-    setValue('quantity', 0)
-    setValue('totalCost', 0)
-  }, [])
-
   return (
     <>
-      <ItemsListComponent
-        tableData={tableData}
-        setShowDeleteModal={setShowDeleteModal}
-        setSelectedItem={setSelectedItem}
-      />
-      <Form onSubmit={handleSubmit(addSubItems)}>
+      <Header as="h2">
+        <Icon name="suitcase" />
+        <Header.Content>
+          Item <Header.Subheader>Edit</Header.Subheader>
+        </Header.Content>
+      </Header>
+      <Form onSubmit={validateHandleSubmit(editItem)}>
         <Segment>
           <Form.Group widths="equal">
             <Controller
               name="itemCategory"
-              control={control}
+              control={validateControl}
               render={({ field: { value } }) => (
                 <Form.Select
                   fluid
@@ -94,13 +63,13 @@ export const BodyRequisitionFormComponent = ({
                   name="itemCategory"
                   value={value}
                   onChange={async (e, { name, value }) => {
-                    setValue(name, value)
-                    setValue('material', null)
-                    setValue('other', '')
-                    setValue('description', '')
-                    setValue('price', 0)
-                    setValue('quantity', 0)
-                    setValue('totalCost', 0)
+                    validateSetValue(name, value)
+                    validateSetValue('material', null)
+                    validateSetValue('other', '')
+                    validateSetValue('description', '')
+                    validateSetValue('price', 0)
+                    validateSetValue('quantity', 0)
+                    validateSetValue('totalCost', 0)
                     if (value === 'Services') {
                       setShowItemOption({
                         material: false,
@@ -126,7 +95,7 @@ export const BodyRequisitionFormComponent = ({
                       })
                     }
                   }}
-                  error={errors.itemCategory ? true : false}
+                  error={validateErrors.itemCategory ? true : false}
                 />
               )}
             />
@@ -135,7 +104,7 @@ export const BodyRequisitionFormComponent = ({
             {showItemOption.material && (
               <Controller
                 name="material"
-                control={control}
+                control={validateControl}
                 render={({ field: { value } }) => (
                   <Form.Select
                     fluid
@@ -147,10 +116,10 @@ export const BodyRequisitionFormComponent = ({
                     name="material"
                     value={value}
                     onChange={async (e, { name, value }) => {
-                      setValue(name, value)
+                      validateSetValue(name, value)
                       setProductData(value as string)
                     }}
-                    error={errors.material ? true : false}
+                    error={validateErrors.material ? true : false}
                   />
                 )}
               />
@@ -158,7 +127,7 @@ export const BodyRequisitionFormComponent = ({
             {showItemOption.others && (
               <Controller
                 name="other"
-                control={control}
+                control={validateControl}
                 render={({ field: { value } }) => (
                   <Form.Input
                     fluid
@@ -167,9 +136,9 @@ export const BodyRequisitionFormComponent = ({
                     name="other"
                     value={value || ''}
                     onChange={async (e, { name, value }) => {
-                      setValue(name, value)
+                      validateSetValue(name, value)
                     }}
-                    error={errors.other ? true : false}
+                    error={validateErrors.other ? true : false}
                   />
                 )}
               />
@@ -177,7 +146,7 @@ export const BodyRequisitionFormComponent = ({
             {showItemOption.description && (
               <Controller
                 name="description"
-                control={control}
+                control={validateControl}
                 render={({ field: { value } }) => (
                   <Form.Input
                     fluid
@@ -186,9 +155,9 @@ export const BodyRequisitionFormComponent = ({
                     name="description"
                     value={value || ''}
                     onChange={async (e, { name, value }) => {
-                      setValue(name, value)
+                      validateSetValue(name, value)
                     }}
-                    error={errors.description ? true : false}
+                    error={validateErrors.description ? true : false}
                   />
                 )}
               />
@@ -198,7 +167,7 @@ export const BodyRequisitionFormComponent = ({
             {showItemOption.unitMeasure && (
               <Controller
                 name="unitMeasure"
-                control={control}
+                control={validateControl}
                 render={({ field: { value } }) => (
                   <Form.Input
                     fluid
@@ -207,16 +176,16 @@ export const BodyRequisitionFormComponent = ({
                     name="unitMeasure"
                     value={value || ''}
                     onChange={async (e, { name, value }: any) => {
-                      setValue(name, value)
+                      validateSetValue(name, value)
                     }}
-                    error={errors.unitMeasure ? true : false}
+                    error={validateErrors.unitMeasure ? true : false}
                   />
                 )}
               />
             )}
             <Controller
               name="price"
-              control={control}
+              control={validateControl}
               render={({ field: { value } }) => (
                 <Form.Input
                   fluid
@@ -226,16 +195,19 @@ export const BodyRequisitionFormComponent = ({
                   type="number"
                   value={value || 0}
                   onChange={async (e, { name, value }: any) => {
-                    setValue(name, value)
-                    setValue('totalCost', getValues('quantity') * value)
+                    validateSetValue(name, value)
+                    validateSetValue(
+                      'totalCost',
+                      validateGetValues('quantity') * value
+                    )
                   }}
-                  error={errors.price ? true : false}
+                  error={validateErrors.price ? true : false}
                 />
               )}
             />
             <Controller
               name="quantity"
-              control={control}
+              control={validateControl}
               render={({ field: { value } }) => (
                 <Form.Input
                   fluid
@@ -245,16 +217,19 @@ export const BodyRequisitionFormComponent = ({
                   type="number"
                   value={value || 0}
                   onChange={async (e, { name, value }: any) => {
-                    setValue(name, value)
-                    setValue('totalCost', getValues('price') * value)
+                    validateSetValue(name, value)
+                    validateSetValue(
+                      'totalCost',
+                      validateGetValues('price') * value
+                    )
                   }}
-                  error={errors.quantity ? true : false}
+                  error={validateErrors.quantity ? true : false}
                 />
               )}
             />
             <Controller
               name="totalCost"
-              control={control}
+              control={validateControl}
               render={({ field: { value } }) => (
                 <Form.Input
                   fluid
@@ -265,17 +240,28 @@ export const BodyRequisitionFormComponent = ({
                   readOnly={true}
                   value={value || 0}
                   onChange={async (e, { name, value }) => {
-                    setValue(name, value)
+                    validateSetValue(name, value)
                   }}
-                  error={errors.totalCost ? true : false}
+                  error={validateErrors.totalCost ? true : false}
                 />
               )}
             />
           </Form.Group>
         </Segment>
+        {error && (
+          <Message
+            header={error}
+            icon="times"
+            content="Server error"
+            color="red"
+          />
+        )}
         <Button type="submit" color="blue">
-          Add item
+          Save
         </Button>
+        <Link href={`/requisition/items/${requisitionId}`}>
+          <Button type="button">Back</Button>
+        </Link>
       </Form>
     </>
   )

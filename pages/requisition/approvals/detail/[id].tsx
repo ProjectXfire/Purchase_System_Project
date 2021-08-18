@@ -16,7 +16,7 @@ import { RequisitionItems } from '@models/requisition/requisition.items.model'
 import { Message } from 'semantic-ui-react'
 // Components
 import { Layout } from '@components/shared/layout'
-import { RequisitionDetailComponent } from '@components/requisition/requisition/detail'
+import { RequisitionApprovalDetailComponent } from '@components/requisition/approval/detail'
 
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
@@ -56,7 +56,7 @@ export const getServerSideProps: GetServerSideProps = async (
   }
 }
 
-const RequisitionDetailPage = ({
+const RequisitionApprovalDetailPage = ({
   requisition,
   requisitionItems,
   user,
@@ -89,7 +89,7 @@ const RequisitionDetailPage = ({
         <Layout permissions={permissions}>
           <main>
             {!error ? (
-              <RequisitionDetailComponent
+              <RequisitionApprovalDetailComponent
                 requisition={requisition}
                 requisitionItems={requisitionItems}
               />
@@ -108,4 +108,4 @@ const RequisitionDetailPage = ({
   )
 }
 
-export default RequisitionDetailPage
+export default RequisitionApprovalDetailPage

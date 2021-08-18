@@ -1,8 +1,9 @@
+import { LocationApprover } from '@models/auth/user.location'
+
 export interface Cookie {
   token: string
   user: string
-  approver: string
   roles: []
-  locations: []
+  locationsApprovers: LocationApprover
   permissions: Record<string, unknown>
 }

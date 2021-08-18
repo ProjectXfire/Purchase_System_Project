@@ -56,9 +56,9 @@ export const getServerSideProps: GetServerSideProps = async (
   } catch (error: any) {
     return {
       props: {
-        user: cookie.user || '',
-        token: cookie.token || '',
-        permissions: cookie.permissions || '',
+        user: cookie && cookie.user ? cookie.user : '',
+        token: cookie && cookie.token ? cookie.token : '',
+        permissions: cookie && cookie.permissions ? cookie.permissions : {},
         dataAccountsByContract: [],
         dataContract: {},
         dataAccounts: [],

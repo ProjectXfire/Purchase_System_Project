@@ -6,7 +6,8 @@ export const reducer = (
     case 'SELECT_LOCATION':
       return {
         ...state,
-        selectedLocation: action.payload
+        selectedLocation: action.payload.location,
+        selectedYear: action.payload.year
       }
     default:
       return state

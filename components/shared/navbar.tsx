@@ -16,10 +16,12 @@ import {
 export const NavbarComponent = ({
   permissions,
   handleVisibleSidebar,
+  openRequisitionModal,
   logout
 }: {
   permissions: Permissions
   handleVisibleSidebar: any
+  openRequisitionModal: () => void
   logout: any
 }): React.ReactElement => {
   return (
@@ -145,11 +147,16 @@ export const NavbarComponent = ({
                       <Dropdown.Header>
                         <HeaderBold>Requisition Management</HeaderBold>
                       </Dropdown.Header>
-                      <Dropdown.Item>
-                        <Link href="/requisition">
-                          <Anchor>Requisition</Anchor>
-                        </Link>
+                      <Dropdown.Item onClick={() => openRequisitionModal()}>
+                        Requisition
                       </Dropdown.Item>
+                      {(permissions.admin || permissions.approval_read) && (
+                        <Dropdown.Item>
+                          <Link href="/requisition/approvals/list">
+                            <Anchor>Approvals</Anchor>
+                          </Link>
+                        </Dropdown.Item>
+                      )}
                       <Dropdown.Item>
                         <i className="dropdown icon" />
                         <span className="text">Options</span>
@@ -177,16 +184,6 @@ export const NavbarComponent = ({
                           <Dropdown.Item>
                             <Link href="/requisition/priority">
                               <Anchor>Priority</Anchor>
-                            </Link>
-                          </Dropdown.Item>
-                          <Dropdown.Item>
-                            <Link href="/requisition/status/creator">
-                              <Anchor>Creator Status</Anchor>
-                            </Link>
-                          </Dropdown.Item>
-                          <Dropdown.Item>
-                            <Link href="/requisition/status/approver">
-                              <Anchor>Approver Status</Anchor>
                             </Link>
                           </Dropdown.Item>
                         </Dropdown.Menu>

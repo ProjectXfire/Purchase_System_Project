@@ -17,3 +17,18 @@ export const parseCookies = (ctx: GetServerSidePropsContext): any => {
     throw new Error('Cookie undefined')
   }
 }
+
+export const parseCookiesLocal = (data: any): any => {
+  const cookieParsed = JSON.parse(data)
+  if (
+    Object.keys(cookieParsed).length === 0 &&
+    cookieParsed.constructor === Object
+  ) {
+    throw new Error('Invalid cookie')
+  }
+  if (cookieParsed.user) {
+    return cookieParsed.locationsApprovers
+  } else {
+    throw new Error('Cookie undefined')
+  }
+}

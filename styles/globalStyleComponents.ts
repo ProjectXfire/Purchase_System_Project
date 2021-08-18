@@ -49,3 +49,9 @@ export const TitleLabel = styled.label`
   font-weight: bolder;
   font-size: 1.5rem;
 `
+
+export const Total = styled.div`
+  display: flex;
+  margin-bottom: 20px;
+  justify-content: flex-end;
+`

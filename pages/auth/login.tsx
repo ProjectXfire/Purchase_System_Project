@@ -24,7 +24,6 @@ export const getServerSideProps: GetServerSideProps = async (
   let cookie: Cookie
   try {
     cookie = parseCookies(ctx)
-    console.log(cookie)
     return {
       props: {
         user: cookie.user
@@ -69,7 +68,7 @@ const LoginPage: React.FC = ({ user }: any) => {
         `${config.apiUrl}/auth/login`,
         formValues
       )
-      Cookies.set('user', userDataValidation.data)
+      Cookies.set('user', userDataValidation.data, { expires: 1 })
       setErrorLogin('')
       router.push('/')
     } catch (error: any) {

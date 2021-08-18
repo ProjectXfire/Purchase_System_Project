@@ -1,29 +1,26 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react'
 // Next
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-// Providers
-import { useForm } from 'react-hook-form'
-import { joiResolver } from '@hookform/resolvers/joi'
-// Utils
 import { parseCookies } from '@utils/parseCookies'
 import { searchItems } from '@utils/searchItems'
 import { sortColumn } from '@utils/sortColumn'
-import { fillDropdown } from '@utils/fillDropdown'
+// Context
+import { AppContext } from '@contextProvider/states'
 // Services
-import { createOne, deleteOne, getList, getOne } from '@services/apiRequest'
+import { deleteOne, getList } from '@services/apiRequest'
+// Utils
+import { updateIndexPage } from '@utils/paginationIndex'
+import { itemsPerPageNumber } from '@utils/variables'
 // Models
 import { Permissions } from '@models/auth/permission.model'
-import { ExpenseSubledger } from '@models/expense/expense.subledger.model'
-import { Expense } from '@models/expense/expense.model'
-import { Subledger } from '@models/expense/subledger.model'
-import { ExpenseSubledgerSchema } from '@models/expense/expense.subledger.schema'
+import { Requisition } from '@models/requisition/requisition.model'
 // Styles
 import { Message } from 'semantic-ui-react'
 // Components
 import { Layout } from '@components/shared/layout'
-import { SubledgersByExpenseComponent } from '@components/generalexpense/expense-subledger/listbyexpense'
+import { RequisitionListByLocationComponent } from '@components/requisition/requisition/listbylocation'
 import { ModalDeleteComponent } from '@components/shared/modalDelete'
 import { ModalErrorComponent } from '@components/shared/modalError'
 
@@ -32,85 +29,83 @@ export const getServerSideProps: GetServerSideProps = async (
 ) => {
   let cookie
   try {
+    cookie = parseCookies(ctx)
     const params = ctx.params
     const id = params && params.id ? (params.id as string) : ''
-    cookie = parseCookies(ctx)
-    const responseSubledgerByExpense = await getList(
-      'expense/expense-subledger/subledgers',
-      cookie.token,
-      id
-    )
-    const responseSubledger = await getList(
-      'expense/subledger/list',
-      cookie.token
-    )
-    const responseExpense = await getOne('expense/read', id, cookie.token)
+    const query = ctx.query
+    const year = query && query.year ? (query.year as string) : ''
     return {
       props: {
         user: cookie.user,
         token: cookie.token,
         permissions: cookie.permissions,
-        dataSubledgersByExpense: responseSubledgerByExpense.data,
-        dataExpense: responseExpense.data,
-        dataSubledgers: responseSubledger.data,
-        error: ''
+        locationId: id,
+        year: parseInt(year)
       }
     }
-  } catch (error: any) {
+  } catch (error) {
     return {
       props: {
         user: cookie && cookie.user ? cookie.user : '',
         token: cookie && cookie.token ? cookie.token : '',
         permissions: cookie && cookie.permissions ? cookie.permissions : {},
-        dataSubledgersByExpense: [],
-        dataExpense: {},
-        dataSubledgers: [],
-        error: error.message
+        locationId: '',
+        year: 2000
       }
     }
   }
 }
 
-const SubledgersByExpensePage = ({
+const RequisitionListByLocationPage = ({
   user,
   token,
   permissions,
-  dataSubledgersByExpense,
-  dataExpense,
-  dataSubledgers,
-  error
+  locationId,
+  year
 }: {
   user: string
   token: string
   permissions: Permissions
-  dataSubledgersByExpense: ExpenseSubledger[]
-  dataExpense: Expense
-  dataSubledgers: Subledger[]
-  error: any
+  locationId: string
+  year: number
 }): React.ReactElement => {
   const router = useRouter()
   const [errorOnRequest, setErrorOnRequest] = useState('')
+  const { state }: any = useContext(AppContext)
 
+  // INITIAL DATA FOR SEARCH AND SORT
+  const [initialData, setInitialData] = useState<Requisition[]>([])
   // SORT DATA SEARCHED
-  const [dataModified, setDataModified] = useState(dataSubledgersByExpense)
+  const [dataSearched, setDataSearched] = useState<Requisition[]>([])
+  const [dataModified, setDataModified] = useState<Requisition[]>([])
 
-  // INIT DROPDOWN VALUES
-  const subledgerDropdown = fillDropdown(dataSubledgers)
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    setValue
-  } = useForm({ resolver: joiResolver(ExpenseSubledgerSchema) })
+  const [pages, setPages] = useState(1)
 
   // SEARCH ITEM
   const [searchInputValue, setSearchInputValue] = useState('')
   const handleSearchedValues = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setSearchInputValue(value)
-    setDataModified(
-      searchItems(dataSubledgersByExpense, ['subledger.name'], value)
+    const dataFound = searchItems(
+      initialData,
+      [
+        'code',
+        'description',
+        'createdBy',
+        'contract.name',
+        'contract.description',
+        'dateRequired',
+        'approvedBy.email',
+        'approvedByStatus',
+        'approvedByDate'
+      ],
+      value
     )
+    const pages = Math.ceil(dataFound.length / itemsPerPageNumber)
+    setPages(pages)
+    const { start, end } = updateIndexPage(1)
+    setSearchInputValue(value)
+    setDataSearched(dataFound)
+    setDataModified(dataFound.slice(start, end))
   }
 
   // SORT BY COLUMN
@@ -118,14 +113,10 @@ const SubledgersByExpensePage = ({
     setDataModified(sortColumn(dataModified, column))
   }
 
-  // CREATE NEW ITEM
-  const addItem = async (data: Record<string, unknown>) => {
-    try {
-      await createOne('expense/expense-subledger/create', data, token)
-      window.location.reload()
-    } catch (error: any) {
-      setErrorOnRequest(error.message)
-    }
+  // HANDLE PAGES
+  const handlePage = async (activePage: number) => {
+    const { start, end } = updateIndexPage(activePage)
+    setDataModified(dataSearched.slice(start, end))
   }
 
   // DELETE ITEM
@@ -140,11 +131,7 @@ const SubledgersByExpensePage = ({
   })
   const deleteItem = async () => {
     try {
-      await deleteOne(
-        'expense/expense-subledger/delete',
-        selectedItem.itemId,
-        token
-      )
+      await deleteOne('requisition/delete', selectedItem.itemId, token)
       setSelectedItem({
         itemId: '',
         itemName: ''
@@ -160,46 +147,66 @@ const SubledgersByExpensePage = ({
     }
   }
 
+  // GET REQUISITIONS BY LOCATION
+  const fetchRequisitions = async () => {
+    try {
+      const responseRequisition = await getList(
+        `requisition/list/${state.selectedLocation || locationId}?year=${
+          state.selectedYear === 0 ? year : state.selectedYear
+        }`,
+        token
+      )
+      const pages = Math.ceil(
+        responseRequisition.data.length / itemsPerPageNumber
+      )
+      const { start, end } = updateIndexPage(1)
+      setPages(pages)
+      setInitialData(responseRequisition.data)
+      setDataSearched(responseRequisition.data)
+      setDataModified(responseRequisition.data.slice(start, end))
+    } catch (error: any) {
+      setErrorOnRequest(error.message)
+    }
+  }
+
   // VALIDATE IF USER IS LOGGED
   useEffect(() => {
     if (!user) {
       router.push('/auth/login')
     } else {
-      setValue('expense', dataExpense._id)
+      fetchRequisitions()
     }
-  }, [])
+  }, [state.selectedLocation, state.selectedYear])
 
   return (
     <>
       <Head>
-        <title>Expense - Subledger</title>
-        <meta name="description" content="Expense" />
+        <title>Requisition</title>
+        <meta name="description" content="Requisition" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {user && (
         <Layout permissions={permissions}>
           <>
             <main>
-              {!error ? (
-                <SubledgersByExpenseComponent
-                  validateHandleSubmit={handleSubmit}
-                  validateSetValue={setValue}
-                  validateErrors={errors}
+              {!errorOnRequest ? (
+                <RequisitionListByLocationComponent
+                  user={user}
+                  selectLocationContext={state.selectedLocation}
+                  selectLocationParam={locationId}
                   permissions={permissions}
-                  dataExpense={dataExpense}
                   tableData={dataModified}
-                  subledgerDropdown={subledgerDropdown}
+                  pages={pages}
+                  handlePage={handlePage}
                   searchInputValue={searchInputValue}
                   handleSearchedValues={handleSearchedValues}
                   sortByColumn={sortByColumn}
                   setSelectedItem={setSelectedItem}
-                  addItem={addItem}
                   setShowModal={setShowModal}
-                  error={errorOnRequest}
                 />
               ) : (
                 <Message
-                  header={error}
+                  header={errorOnRequest}
                   icon="times"
                   content="Server error"
                   color="red"
@@ -226,4 +233,4 @@ const SubledgersByExpensePage = ({
   )
 }
 
-export default SubledgersByExpensePage
+export default RequisitionListByLocationPage

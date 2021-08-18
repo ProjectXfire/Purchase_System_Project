@@ -12,11 +12,13 @@ export const SidebarComponent = ({
   permissions,
   visible,
   setVisible,
+  openRequisitionModal,
   logout
 }: {
   permissions: Permissions
   visible: boolean
   setVisible: any
+  openRequisitionModal: () => void
   logout: any
 }): React.ReactElement => {
   return (
@@ -105,11 +107,16 @@ export const SidebarComponent = ({
       {(permissions.admin || permissions.req_read) && (
         <Dropdown text="Requisition" item>
           <Dropdown.Menu>
-            <Dropdown.Item>
-              <Link href="/requisition">
-                <Anchor>Requisition</Anchor>
-              </Link>
+            <Dropdown.Item onClick={() => openRequisitionModal()}>
+              Requisition
             </Dropdown.Item>
+            {(permissions.admin || permissions.approval_read) && (
+              <Dropdown.Item>
+                <Link href="/requisition/approvals/list">
+                  <Anchor>Approvals</Anchor>
+                </Link>
+              </Dropdown.Item>
+            )}
             <Dropdown.Item>
               <Link href="/requisition/shipto">
                 <Anchor>Ship to</Anchor>
@@ -133,16 +140,6 @@ export const SidebarComponent = ({
             <Dropdown.Item>
               <Link href="/requisition/priority">
                 <Anchor>Priority</Anchor>
-              </Link>
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <Link href="/requisition/status/creator">
-                <Anchor>Creator Status</Anchor>
-              </Link>
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <Link href="/requisition/status/approver">
-                <Anchor>Approver Status</Anchor>
               </Link>
             </Dropdown.Item>
           </Dropdown.Menu>

@@ -14,17 +14,14 @@ import {
   fillDropdown,
   fillDropdownContract,
   fillDropdownAccount,
-  fillDropdownOnlyName,
   userStatusDropdown,
-  approverStatusDropdown
+  fillDropdownOnlyEmail
 } from '@utils/fillDropdown'
 // Services
 import { createOne, getList } from '@services/apiRequest'
 // Models
-import { Cookie } from '@models/auth/cookie.model'
 import { Permissions } from '@models/auth/permission.model'
 import { RequisitionSchema } from '@models/requisition/requisition.schema'
-import { Location } from '@models/contract/location.model'
 import { Priority } from '@models/requisition/priority.model'
 import { Requestor } from '@models/requisition/requestor.model'
 import { Currency } from '@models/requisition/currency.model'
@@ -43,14 +40,16 @@ import { ExpenseSubledger } from '@models/expense/expense.subledger.model'
 import { Message } from 'semantic-ui-react'
 // Components
 import { Layout } from '@components/shared/layout'
-import { RequisitionCreateComponent } from '@components/requisition/requisition/create'
+import { RequisitionByLocationCreateComponent } from '@components/requisition/requisition/createbylocation'
 
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
-  let cookie: Cookie
+  let cookie
   try {
     cookie = parseCookies(ctx)
+    const params = ctx.params
+    const id = params && params.id ? (params.id as string) : ''
     const priorities = await getList('requisition/priority/list', cookie.token)
     const requestors = await getList('requisition/requestor/list', cookie.token)
     const currencies = await getList('requisition/currency/list', cookie.token)
@@ -61,7 +60,8 @@ export const getServerSideProps: GetServerSideProps = async (
         user: cookie.user,
         token: cookie.token,
         permissions: cookie.permissions,
-        locations: cookie.locations,
+        locations: cookie.locationsApprovers,
+        locationId: id,
         priorities: priorities.data,
         requestors: requestors.data,
         currencies: currencies.data,
@@ -72,10 +72,11 @@ export const getServerSideProps: GetServerSideProps = async (
   } catch (error) {
     return {
       props: {
-        user: '',
-        token: '',
-        permissions: {},
+        user: cookie && cookie.user ? cookie.user : '',
+        token: cookie && cookie.token ? cookie.token : '',
+        permissions: cookie && cookie.permissions ? cookie.permissions : {},
         locations: [],
+        locationId: '',
         priorities: [],
         requestors: [],
         currencies: [],
@@ -92,11 +93,12 @@ interface DropdownValues {
   text: string
 }
 
-const RequistionCreatePage = ({
+const RequistionByLocationCreatePage = ({
   user,
   token,
   permissions,
   locations,
+  locationId,
   priorities,
   requestors,
   currencies,
@@ -106,7 +108,8 @@ const RequistionCreatePage = ({
   user: string
   token: string
   permissions: Permissions
-  locations: Location[]
+  locations: any[]
+  locationId: string
   priorities: Priority[]
   requestors: Requestor[]
   currencies: Currency[]
@@ -115,6 +118,7 @@ const RequistionCreatePage = ({
 }): React.ReactElement => {
   const router = useRouter()
   const [errorOnRequest, setErrorOnRequest] = useState('')
+  const [locationName, setLocationName] = useState('')
   const [selected, setSelected] = useState({
     selectedContract: true,
     selectedExpense: true
@@ -130,7 +134,6 @@ const RequistionCreatePage = ({
   } = useForm({ resolver: joiResolver(RequisitionSchema) })
 
   // INIT DROPDOWNS
-  const locationsDropdown = fillDropdownOnlyName(locations)
   const prioritiesDropdown = fillDropdown(priorities)
   const requestorsDropdown = fillDropdown(requestors)
   const currenciesDropdown = fillDropdown(currencies)
@@ -143,7 +146,7 @@ const RequistionCreatePage = ({
   const [approversDropdown, setApproversDropdown] = useState<DropdownValues[]>(
     []
   )
-  const fillDropdownByLocation = async (locationId: string) => {
+  const fillDropdownByLocation = async () => {
     try {
       const responseContract: AxiosResponse = await getList(
         'contract/locations',
@@ -173,10 +176,9 @@ const RequistionCreatePage = ({
       setValue('expense', null)
       setValue('costtype', null)
       setValue('subledger', null)
-      setValue('approvedBy', null)
       setContractDropdown(fillDropdownContract(getContractsFound))
       setExpenseDropdown(fillDropdown(getExpensesFound))
-      setApproversDropdown(fillDropdownOnlyName(responseApprovers.data))
+      setApproversDropdown(fillDropdownOnlyEmail(responseApprovers.data))
     } catch (error: any) {
       setErrorOnRequest(error.message)
     }
@@ -247,7 +249,8 @@ const RequistionCreatePage = ({
   const createItem = async () => {
     try {
       await createOne('requisition/create', getValues(), token)
-      router.push('/requisition')
+      console.log(locationId)
+      router.push(`/requisition/${locationId}?year=${new Date().getFullYear()}`)
       setErrorOnRequest('')
     } catch (error: any) {
       setErrorOnRequest(error.message)
@@ -259,11 +262,14 @@ const RequistionCreatePage = ({
     if (!user) {
       router.push('/auth/login')
     } else {
-      setValue('createdBy', user, { shouldValidate: true })
+      const getLocation = locations.find(item => item.locationId === locationId)
+      setLocationName(getLocation?.locationName)
+      fillDropdownByLocation()
+      setValue('createdBy', user)
       setValue('createdByStatus', 'Open', {
         shouldValidate: true
       })
-      setValue('location', null)
+      setValue('location', locationId)
       setValue('description', '')
       setValue('contract', null)
       setValue('account', null)
@@ -294,13 +300,14 @@ const RequistionCreatePage = ({
         <Layout permissions={permissions}>
           <main>
             {permissions.admin || permissions.req_create ? (
-              <RequisitionCreateComponent
+              <RequisitionByLocationCreateComponent
                 validateSetValue={setValue}
                 validateControl={control}
                 validateErrors={errors}
                 validateHandleSubmit={handleSubmit}
                 user={user}
-                fillDropdownByLocation={fillDropdownByLocation}
+                locationId={locationId}
+                locationName={locationName}
                 selected={selected}
                 setSelected={setSelected}
                 fillDropdownAccountByContract={fillDropdownAccountByContract}
@@ -309,7 +316,6 @@ const RequistionCreatePage = ({
                 expenseSubledgerDropdown={expenseSubledgerDropdown}
                 expenseAccountDropdown={expenseAccountDropdown}
                 userStatusDropdown={userStatusDropdown}
-                locationsDropdown={locationsDropdown}
                 prioritiesDropdown={prioritiesDropdown}
                 requestorsDropdown={requestorsDropdown}
                 currenciesDropdown={currenciesDropdown}
@@ -318,7 +324,6 @@ const RequistionCreatePage = ({
                 expensesDropdown={expenseDropdown}
                 contractsDropdown={contractDropdown}
                 approversDropdown={approversDropdown}
-                approverStatusDropdown={approverStatusDropdown}
                 createItem={createItem}
                 error={errorOnRequest}
               />
@@ -337,4 +342,4 @@ const RequistionCreatePage = ({
   )
 }
 
-export default RequistionCreatePage
+export default RequistionByLocationCreatePage

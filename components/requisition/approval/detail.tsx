@@ -13,7 +13,7 @@ import { TitleLabel } from '@styles/globalStyleComponents'
 // Components
 import { ItemsListComponent } from '@components/requisition/requisition/items'
 
-export const RequisitionDetailComponent = ({
+export const RequisitionApprovalDetailComponent = ({
   requisition,
   requisitionItems
 }: {
@@ -253,9 +253,7 @@ export const RequisitionDetailComponent = ({
         tableData={requisitionItems}
         showActionsButton={false}
       />
-      <Link
-        href={`/requisition/${requisition.location._id}?year=${requisition.year}`}
-      >
+      <Link href="/requisition/approvals/list">
         <Button type="button">Back</Button>
       </Link>
     </>

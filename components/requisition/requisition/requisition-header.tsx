@@ -26,6 +26,8 @@ export const HeaderRequisitionFormComponent = ({
   validateControl,
   validateErrors,
   validateHandleSubmit,
+  locationId,
+  year,
   fillDropdownApproversByLocation,
   fillDropdownContractsByLocation,
   fillDropdownExpensesByLocation,
@@ -46,7 +48,6 @@ export const HeaderRequisitionFormComponent = ({
   expensesDropdown,
   contractsDropdown,
   approversDropdown,
-  approverStatusDropdown,
   changeUserStatus,
   error
 }: {
@@ -54,6 +55,8 @@ export const HeaderRequisitionFormComponent = ({
   validateControl: any
   validateErrors: any
   validateHandleSubmit: any
+  locationId: string
+  year: number
   fillDropdownApproversByLocation: (id: string) => void
   fillDropdownContractsByLocation: (id: string) => void
   fillDropdownExpensesByLocation: (id: string) => void
@@ -74,7 +77,6 @@ export const HeaderRequisitionFormComponent = ({
   expensesDropdown: DropdownValues[]
   contractsDropdown: DropdownValues[]
   approversDropdown: DropdownValues[]
-  approverStatusDropdown: DropdownValues[]
   changeUserStatus: () => void
   error: string
 }): React.ReactElement => {
@@ -115,11 +117,15 @@ export const HeaderRequisitionFormComponent = ({
                   placeholder="Select location"
                   name="location"
                   value={value}
+                  disabled
                   onChange={async (e, { name, value }) => {
                     validateSetValue(name, value)
                     validateSetValue('contract', null)
                     validateSetValue('account', null)
                     validateSetValue('expense', null)
+                    validateSetValue('costtype', null)
+                    validateSetValue('subledger', null)
+                    validateSetValue('approvedBy', null)
                     fillDropdownApproversByLocation(value as string)
                     fillDropdownContractsByLocation(value as string)
                     fillDropdownExpensesByLocation(value as string)
@@ -495,39 +501,6 @@ export const HeaderRequisitionFormComponent = ({
                 />
               )}
             />
-            <Controller
-              name="approvedByStatus"
-              control={validateControl}
-              render={({ field: { value } }) => (
-                <Form.Select
-                  fluid
-                  search
-                  clearable
-                  label="Approval status"
-                  options={approverStatusDropdown}
-                  placeholder="Select status"
-                  name="approvedByStatus"
-                  value={value}
-                  disabled
-                  onChange={async (e, { name, value }) => {
-                    validateSetValue(name, value)
-                  }}
-                  error={validateErrors.approvedByStatus ? true : false}
-                />
-              )}
-            />
-            <Form.Input
-              fluid
-              label="Approval date"
-              placeholder="Approval date"
-              name="approvedByDate"
-              type="date"
-              disabled
-              onChange={async (e, { name, value }) => {
-                validateSetValue(name, value)
-              }}
-              error={validateErrors.approvedByDate ? true : false}
-            />
           </Form.Group>
         </Segment>
         {error && (
@@ -541,7 +514,7 @@ export const HeaderRequisitionFormComponent = ({
         <Button type="submit" color="blue">
           Save
         </Button>
-        <Link href="/requisition">
+        <Link href={`/requisition/${locationId}?year=${year}`}>
           <Button type="button">Back</Button>
         </Link>
       </Form>

@@ -16,4 +16,5 @@ export interface Permissions {
   req_create: string
   req_edit: string
   req_delete: string
+  approval_read: string
 }

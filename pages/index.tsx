@@ -8,14 +8,13 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { parseCookies } from '@utils/parseCookies'
 // Models
 import { Permissions } from '@models/auth/permission.model'
-import { Cookie } from '@models/auth/cookie.model'
 // Components
 import { Layout } from '@components/shared/layout'
 
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
-  let cookie: Cookie
+  let cookie
   try {
     cookie = parseCookies(ctx)
     return {
@@ -27,8 +26,8 @@ export const getServerSideProps: GetServerSideProps = async (
   } catch (error) {
     return {
       props: {
-        user: '',
-        permissions: {}
+        user: cookie && cookie.user ? cookie.user : '',
+        permissions: cookie && cookie.permissions ? cookie.permissions : {}
       }
     }
   }

@@ -21,13 +21,14 @@ interface DropdownValues {
   text: string
 }
 
-export const RequisitionCreateComponent = ({
+export const RequisitionByLocationCreateComponent = ({
   validateSetValue,
   validateControl,
   validateErrors,
   validateHandleSubmit,
   user,
-  fillDropdownByLocation,
+  locationId,
+  locationName,
   selected,
   setSelected,
   fillDropdownAccountByContract,
@@ -36,7 +37,6 @@ export const RequisitionCreateComponent = ({
   expenseAccountDropdown,
   expenseSubledgerDropdown,
   userStatusDropdown,
-  locationsDropdown,
   prioritiesDropdown,
   requestorsDropdown,
   currenciesDropdown,
@@ -45,7 +45,6 @@ export const RequisitionCreateComponent = ({
   expensesDropdown,
   contractsDropdown,
   approversDropdown,
-  approverStatusDropdown,
   createItem,
   error
 }: {
@@ -54,7 +53,8 @@ export const RequisitionCreateComponent = ({
   validateErrors: any
   validateHandleSubmit: any
   user: string
-  fillDropdownByLocation: (id: string) => void
+  locationId: string
+  locationName: string
   selected: Record<string, unknown>
   setSelected: any
   fillDropdownAccountByContract: (id: string) => void
@@ -63,7 +63,6 @@ export const RequisitionCreateComponent = ({
   expenseAccountDropdown: DropdownValues[]
   expenseSubledgerDropdown: DropdownValues[]
   userStatusDropdown: DropdownValues[]
-  locationsDropdown: DropdownValues[]
   prioritiesDropdown: DropdownValues[]
   requestorsDropdown: DropdownValues[]
   currenciesDropdown: DropdownValues[]
@@ -72,7 +71,6 @@ export const RequisitionCreateComponent = ({
   expensesDropdown: DropdownValues[]
   contractsDropdown: DropdownValues[]
   approversDropdown: DropdownValues[]
-  approverStatusDropdown: DropdownValues[]
   createItem: () => void
   error: string
 }): React.ReactElement => {
@@ -81,7 +79,8 @@ export const RequisitionCreateComponent = ({
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
-          Requisition <Header.Subheader>Create</Header.Subheader>
+          Requisition{' '}
+          <Header.Subheader>Create - {locationName}</Header.Subheader>
         </Header.Content>
       </Header>
       <Form onSubmit={validateHandleSubmit(createItem)}>
@@ -94,25 +93,6 @@ export const RequisitionCreateComponent = ({
               name="createdBy"
               readOnly={true}
               value={user || ''}
-            />
-            <Form.Select
-              fluid
-              search
-              label="Locations"
-              options={locationsDropdown}
-              placeholder="Select location"
-              name="location"
-              onChange={async (e, { name, value }) => {
-                validateSetValue(name, value)
-                validateSetValue('contract', null)
-                validateSetValue('account', null)
-                validateSetValue('expense', null)
-                validateSetValue('costtype', null)
-                validateSetValue('subledger', null)
-                fillDropdownByLocation(value as string)
-                setSelected({ selectedContract: true, selectedExpense: true })
-              }}
-              error={validateErrors.location ? true : false}
             />
             <Form.Input
               fluid
@@ -415,39 +395,6 @@ export const RequisitionCreateComponent = ({
                 />
               )}
             />
-            <Controller
-              name="approvedByStatus"
-              control={validateControl}
-              render={({ field: { value } }) => (
-                <Form.Select
-                  fluid
-                  search
-                  clearable
-                  label="Approval status"
-                  options={approverStatusDropdown}
-                  placeholder="Select status"
-                  name="approvedByStatus"
-                  value={value}
-                  disabled
-                  onChange={async (e, { name, value }) => {
-                    validateSetValue(name, value)
-                  }}
-                  error={validateErrors.approvedByStatus ? true : false}
-                />
-              )}
-            />
-            <Form.Input
-              fluid
-              label="Approval date"
-              placeholder="Approval date"
-              name="approvedByDate"
-              type="date"
-              disabled
-              onChange={async (e, { name, value }) => {
-                validateSetValue(name, value)
-              }}
-              error={validateErrors.approvedByDate ? true : false}
-            />
           </Form.Group>
         </Segment>
         {error && (
@@ -461,7 +408,9 @@ export const RequisitionCreateComponent = ({
         <Button type="submit" color="blue">
           Save
         </Button>
-        <Link href="/requisition">
+        <Link
+          href={`/requisition/${locationId}?year=${new Date().getFullYear()}`}
+        >
           <Button type="button">Back</Button>
         </Link>
       </Form>

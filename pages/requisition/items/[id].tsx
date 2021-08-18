@@ -15,15 +15,20 @@ import {
   fillDropdown,
   fillDropdownContract,
   fillDropdownAccount,
-  fillDropdownOnlyName,
   userStatusDropdown,
-  approverStatusDropdown,
-  categoriesDropdown
+  categoriesDropdown,
+  fillDropdownLocationsApprovers,
+  fillDropdownOnlyEmail
 } from '@utils/fillDropdown'
 // Services
-import { createOne, getList, getOne, updateOne } from '@services/apiRequest'
+import {
+  createOne,
+  deleteOne,
+  getList,
+  getOne,
+  updateOne
+} from '@services/apiRequest'
 // Models
-import { Cookie } from '@models/auth/cookie.model'
 import { Permissions } from '@models/auth/permission.model'
 import { Requisition } from '@models/requisition/requisition.model'
 import { Location } from '@models/contract/location.model'
@@ -50,20 +55,14 @@ import { Message } from 'semantic-ui-react'
 // Components
 import { Layout } from '@components/shared/layout'
 import { ModalComponent } from '@components/shared/modal'
+import { ModalDeleteComponent } from '@components/shared/modalDelete'
 import { HeaderRequisitionFormComponent } from '@components/requisition/requisition/requisition-header'
 import { BodyRequisitionFormComponent } from '@components/requisition/requisition/requisition-body'
 
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
-  let cookie: Cookie = {
-    token: '',
-    user: '',
-    approver: '',
-    roles: [],
-    locations: [],
-    permissions: {}
-  }
+  let cookie
   try {
     cookie = parseCookies(ctx)
     const params = ctx.params
@@ -89,7 +88,7 @@ export const getServerSideProps: GetServerSideProps = async (
         user: cookie.user,
         token: cookie.token,
         permissions: cookie.permissions,
-        locations: cookie.locations,
+        locations: cookie.locationsApprovers,
         requisition: requisition.data,
         requisitionItems: requisitionItems.data,
         priorities: priorities.data,
@@ -104,10 +103,11 @@ export const getServerSideProps: GetServerSideProps = async (
   } catch (error) {
     return {
       props: {
-        user: cookie.user || '',
-        token: cookie.token || '',
-        permissions: cookie.permissions || [],
-        locations: cookie.locations || [],
+        user: cookie && cookie.user ? cookie.user : '',
+        token: cookie && cookie.token ? cookie.token : '',
+        permissions: cookie && cookie.permissions ? cookie.permissions : {},
+        locations:
+          cookie && cookie.locationsApprovers ? cookie.locationsApprovers : [],
         requisition: {},
         requisitionItems: [],
         priorities: [],
@@ -174,7 +174,7 @@ const ItemsPage = ({
   } = useForm({ resolver: joiResolver(RequisitionSchema) })
 
   // INIT DROPDOWNS
-  const locationsDropdown = fillDropdownOnlyName(locations)
+  const locationsDropdown = fillDropdownLocationsApprovers(locations)
   const prioritiesDropdown = fillDropdown(priorities)
   const requestorsDropdown = fillDropdown(requestors)
   const currenciesDropdown = fillDropdown(currencies)
@@ -186,13 +186,13 @@ const ItemsPage = ({
   const [approversDropdown, setApproversDropdown] = useState<DropdownValues[]>(
     []
   )
-  const fillDropdownApproversByLocation = async (locationId: string) => {
+  const fetchApproversByLocation = async (locationId: string) => {
     try {
       const responseApprovers: AxiosResponse = await getList(
         `user?approver=true&location=${locationId}`,
         token
       )
-      setApproversDropdown(fillDropdownOnlyName(responseApprovers.data))
+      setApproversDropdown(fillDropdownOnlyEmail(responseApprovers.data))
     } catch (error: any) {
       setErrorOnRequest(error.message)
     }
@@ -200,7 +200,7 @@ const ItemsPage = ({
 
   // CONTRACTS
   const [contractDropdown, setContractDropdown] = useState<DropdownValues[]>([])
-  const fillDropdownContractsByLocation = async (locationId: string) => {
+  const fetchContractsByLocation = async (locationId: string) => {
     try {
       const responseContract: AxiosResponse = await getList(
         'contract/locations',
@@ -218,7 +218,7 @@ const ItemsPage = ({
   const [contractAccountDropdown, setContractAccountDropdown] = useState<
     DropdownValues[]
   >([])
-  const fillDropdownAccountsByContract = async (contractId: string) => {
+  const fetchAccountsByContract = async (contractId: string) => {
     try {
       const responseContractAccount: AxiosResponse = await getList(
         'contract/account/list',
@@ -245,7 +245,7 @@ const ItemsPage = ({
   const [expenseSubledgerDropdown, setExpenseSubledgerDropdown] = useState<
     DropdownValues[]
   >([])
-  const fillDropdownExpensesByLocation = async (locationId: string) => {
+  const fetchExpensesByLocation = async (locationId: string) => {
     try {
       const responseExpense: AxiosResponse = await getList(
         'expense/expense-location/location/expenses',
@@ -263,7 +263,7 @@ const ItemsPage = ({
       setErrorOnRequest(error.message)
     }
   }
-  const fillDropdownExpenseOptions = async (expenseId: string) => {
+  const fetchExpenseOptions = async (expenseId: string) => {
     try {
       const responseExpenseAccounts: AxiosResponse = await getList(
         'expense/expense-account/accounts',
@@ -294,7 +294,7 @@ const ItemsPage = ({
     }
   }
 
-  // EDIT ITEM
+  // EDIT ITEM - HEADER
   const [modal, setModal] = useState(false)
   const [message, setMessage] = useState('')
   const [accept, setAccept] = useState(false)
@@ -327,21 +327,45 @@ const ItemsPage = ({
       }
     }
   }
-  const editItem = async () => {
+  const editItem = async (option: string) => {
+    if (option === 'ok') {
+      try {
+        await updateOne('requisition/edit', requisition._id, getValues(), token)
+        router.push(
+          `/requisition/${requisition.location._id}?year=${requisition.year}`
+        )
+        setErrorOnRequest('')
+        setModal(false)
+      } catch (error: any) {
+        setErrorOnRequest(error.message)
+      }
+    } else {
+      setModal(false)
+      setValue('createdByStatus', 'Open')
+    }
+  }
+
+  // ADD SUB ITEMS - BODY
+  const addSubItems = async (data: Record<string, unknown>) => {
+    data.requisition = requisition._id
     try {
-      await updateOne('requisition/edit', requisition._id, getValues(), token)
-      router.push('/requisition')
+      await createOne('requisition/items/create', data, token)
       setErrorOnRequest('')
+      window.location.reload()
     } catch (error: any) {
       setErrorOnRequest(error.message)
     }
   }
 
-  // ADD SUB ITEMS
-  const addSubItems = async (data: Record<string, unknown>) => {
-    data.requisition = requisition._id
+  // DELETE SUB ITEMS
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [selectedItem, setSelectedItem] = useState({
+    itemId: '',
+    itemName: ''
+  })
+  const deleteSubItems = async () => {
     try {
-      await createOne('requisition/items/create', data, token)
+      await deleteOne('requisition/items/delete', selectedItem.itemId, token)
       setErrorOnRequest('')
       window.location.reload()
     } catch (error: any) {
@@ -354,14 +378,14 @@ const ItemsPage = ({
     if (!user) {
       router.push('/auth/login')
     } else {
-      setApproversDropdown(fillDropdownOnlyName(approvers))
+      setApproversDropdown(fillDropdownOnlyEmail(approvers))
       if (requisition.contract && requisition.contract._id) {
-        fillDropdownContractsByLocation(requisition.location._id)
-        fillDropdownAccountsByContract(requisition.contract._id)
+        fetchContractsByLocation(requisition.location._id)
+        fetchAccountsByContract(requisition.contract._id)
       }
       if (requisition.expense && requisition.expense._id) {
-        fillDropdownExpensesByLocation(requisition.location._id)
-        fillDropdownExpenseOptions(requisition.expense._id)
+        fetchExpensesByLocation(requisition.location._id)
+        fetchExpenseOptions(requisition.expense._id)
       }
       setValue('createdBy', requisition.createdBy)
       setValue('createdByStatus', requisition.createdByStatus, {
@@ -438,22 +462,16 @@ const ItemsPage = ({
                   validateControl={control}
                   validateErrors={errors}
                   validateHandleSubmit={handleSubmit}
-                  fillDropdownApproversByLocation={
-                    fillDropdownApproversByLocation
-                  }
-                  fillDropdownContractsByLocation={
-                    fillDropdownContractsByLocation
-                  }
-                  fillDropdownExpensesByLocation={
-                    fillDropdownExpensesByLocation
-                  }
+                  locationId={requisition.location._id}
+                  year={requisition.year}
+                  fillDropdownApproversByLocation={fetchApproversByLocation}
+                  fillDropdownContractsByLocation={fetchContractsByLocation}
+                  fillDropdownExpensesByLocation={fetchExpensesByLocation}
                   selected={selected}
                   setSelected={setSelected}
-                  fillDropdownAccountsByContract={
-                    fillDropdownAccountsByContract
-                  }
+                  fillDropdownAccountsByContract={fetchAccountsByContract}
                   contractAccountDropdown={contractAccountDropdown}
-                  fillDropdownExpenseOptions={fillDropdownExpenseOptions}
+                  fillDropdownExpenseOptions={fetchExpenseOptions}
                   expenseSubledgerDropdown={expenseSubledgerDropdown}
                   expenseAccountDropdown={expenseAccountDropdown}
                   userStatusDropdown={userStatusDropdown}
@@ -466,7 +484,6 @@ const ItemsPage = ({
                   expensesDropdown={expenseDropdown}
                   contractsDropdown={contractDropdown}
                   approversDropdown={approversDropdown}
-                  approverStatusDropdown={approverStatusDropdown}
                   changeUserStatus={changeUserStatus}
                   error={errorOnRequest}
                 />
@@ -475,15 +492,23 @@ const ItemsPage = ({
                   categoriesDropdown={categoriesDropdown}
                   productsDropdown={productsDropdown}
                   products={products}
+                  setShowDeleteModal={setShowDeleteModal}
+                  setSelectedItem={setSelectedItem}
                   addSubItems={addSubItems}
                 />
                 <ModalComponent
                   open={modal}
                   setOpen={setModal}
                   message={message}
-                  setValue={setValue}
                   action={editItem}
                   acceptButton={accept}
+                />
+                <ModalDeleteComponent
+                  showModal={showDeleteModal}
+                  setShowModal={setShowDeleteModal}
+                  headerText="Are yo sure to delete?"
+                  deleteItemText={selectedItem.itemName}
+                  deleteAction={deleteSubItems}
                 />
               </>
             ) : (

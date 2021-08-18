@@ -11,6 +11,7 @@ import { Permissions } from '@models/auth/permission.model'
 import { NavbarComponent } from '@components/shared/navbar'
 import { SidebarComponent } from '@components/shared/sidebar'
 import { FooterComponent } from '@components/shared/footer'
+import { ModalDropdownComponent } from '@components/shared/modalDropdown'
 // Styles
 import { Sidebar } from 'semantic-ui-react'
 
@@ -32,6 +33,12 @@ export const Layout = ({
     router.push('/auth/login')
   }
 
+  // REQUISITION MODAL
+  const [open, setOpen] = useState(false)
+  const openRequisitionModal = () => {
+    setOpen(true)
+  }
+
   useEffect(() => {
     if (!isTabletOrMobile) {
       setVisible(false)
@@ -43,12 +50,14 @@ export const Layout = ({
       <NavbarComponent
         permissions={permissions}
         handleVisibleSidebar={handleVisibleSidebar}
+        openRequisitionModal={openRequisitionModal}
         logout={logout}
       />
       <SidebarComponent
         permissions={permissions}
         visible={visible}
         setVisible={setVisible}
+        openRequisitionModal={openRequisitionModal}
         logout={logout}
       />
       <Sidebar.Pushable style={{ height: '100vh' }}>
@@ -57,6 +66,14 @@ export const Layout = ({
           <FooterComponent />
         </Sidebar.Pusher>
       </Sidebar.Pushable>
+      <ModalDropdownComponent
+        open={open}
+        setOpen={setOpen}
+        headerMessage="Locations"
+        textMessage="Select location"
+        secondTextMessage="Select year"
+        setVisible={setVisible}
+      />
     </>
   )
 }

@@ -11,7 +11,6 @@ import { parseCookies } from '@utils/parseCookies'
 // Services
 import { createOne } from '@services/apiRequest'
 // Models
-import { Cookie } from '@models/auth/cookie.model'
 import { Permissions } from '@models/auth/permission.model'
 import { LocationSchema } from '@models/contract/location.schema'
 // Styles
@@ -23,7 +22,7 @@ import { LocationCreateComponent } from '@components/contract/location/create'
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
-  let cookie: Cookie
+  let cookie
   try {
     cookie = parseCookies(ctx)
     return {
@@ -36,9 +35,9 @@ export const getServerSideProps: GetServerSideProps = async (
   } catch (error) {
     return {
       props: {
-        user: '',
-        token: '',
-        permissions: {}
+        user: cookie && cookie.user ? cookie.user : '',
+        token: cookie && cookie.token ? cookie.token : '',
+        permissions: cookie && cookie.permissions ? cookie.permissions : {}
       }
     }
   }

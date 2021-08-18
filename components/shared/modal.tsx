@@ -1,37 +1,53 @@
-import React from 'react'
+import React, { ChangeEvent, useState } from 'react'
 // Styles
-import { Modal, Button, Header } from 'semantic-ui-react'
+import { Modal, Button, Header, TextArea, Form } from 'semantic-ui-react'
 
 export const ModalComponent = ({
   open,
   setOpen,
   message,
-  setValue,
   acceptButton,
+  comment = false,
   action
 }: {
   open: boolean
   setOpen: any
   message?: string
-  setValue: any
   acceptButton?: boolean
-  action: () => void
+  comment?: boolean
+  action: (option: string, comment: string) => void
 }): React.ReactElement => {
+  const [commentText, setCommentText] = useState('')
+  const handleComment = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentText(e.target.value)
+  }
+
   return (
     <Modal
       open={open}
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
+      closeOnDimmerClick={false}
     >
       <Header icon="star" content="Status" />
       <Modal.Content>{message}</Modal.Content>
+      {comment && (
+        <Modal.Content>
+          <Form>
+            <TextArea
+              name="comment"
+              placeholder="Comments"
+              onChange={e => handleComment(e)}
+            />
+          </Form>
+        </Modal.Content>
+      )}
       <Modal.Actions>
         {acceptButton && (
           <Button
             color="green"
             onClick={() => {
-              setOpen(false)
-              action()
+              action('ok', commentText)
             }}
           >
             Accept
@@ -40,8 +56,7 @@ export const ModalComponent = ({
         <Button
           color="red"
           onClick={() => {
-            setOpen(false)
-            setValue('createdByStatus', 'Open')
+            action('cancel', commentText)
           }}
         >
           Cancel

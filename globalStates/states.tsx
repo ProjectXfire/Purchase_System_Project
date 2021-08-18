@@ -3,7 +3,8 @@ import { reducer } from './reducer'
 
 // Init states
 const initialState = {
-  selectedLocation: ''
+  selectedLocation: '',
+  selectedYear: 0
 }
 
 // Create context
