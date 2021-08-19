@@ -249,7 +249,6 @@ const RequistionByLocationCreatePage = ({
   const createItem = async () => {
     try {
       await createOne('requisition/create', getValues(), token)
-      console.log(locationId)
       router.push(`/requisition/${locationId}?year=${new Date().getFullYear()}`)
       setErrorOnRequest('')
     } catch (error: any) {
@@ -286,6 +285,7 @@ const RequistionByLocationCreatePage = ({
       setValue('approvedByStatus', null)
       setValue('observation', '')
       setValue('dateRequired', null)
+      setValue('items', [])
     }
   }, [])
 

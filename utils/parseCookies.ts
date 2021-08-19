@@ -18,6 +18,7 @@ export const parseCookies = (ctx: GetServerSidePropsContext): any => {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const parseCookiesLocal = (data: any): any => {
   const cookieParsed = JSON.parse(data)
   if (

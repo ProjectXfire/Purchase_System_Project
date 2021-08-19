@@ -68,7 +68,9 @@ const LoginPage: React.FC = ({ user }: any) => {
         `${config.apiUrl}/auth/login`,
         formValues
       )
-      Cookies.set('user', userDataValidation.data, { expires: 1 })
+      Cookies.set('user', userDataValidation.data, {
+        expires: new Date(new Date().getTime() + 60 * 60 * 1000)
+      })
       setErrorLogin('')
       router.push('/')
     } catch (error: any) {

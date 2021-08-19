@@ -1,31 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 // Models
 import { RequisitionItems } from '@models/requisition/requisition.items.model'
 // Styles
 import { Button, Header, Icon, Label, Table } from 'semantic-ui-react'
 import { Total } from '@styles/globalStyleComponents'
-import Link from 'next/link'
 
 export const ItemsListComponent = ({
   tableData,
+  totalOrder = 0,
   showActionsButton = true,
-  setShowDeleteModal,
-  setSelectedItem
+  deleteSubItems = () => true,
+  setOpenEditModal,
+  setSelectedItemIndex
 }: {
   tableData: RequisitionItems[]
+  totalOrder?: number
   showActionsButton?: boolean
-  setShowDeleteModal?: any
-  setSelectedItem?: any
+  deleteSubItems?: (index: number) => void
+  setOpenEditModal?: any
+  setSelectedItemIndex?: any
 }): React.ReactElement => {
-  const [totalOrder, setTotalOrder] = useState(0)
-
-  useEffect(() => {
-    const total = tableData.reduce((accumulator, currentValue) => {
-      return accumulator + currentValue.totalCost
-    }, 0)
-    setTotalOrder(total)
-  }, [totalOrder])
-
   return (
     <>
       <Header as="h2">
@@ -49,13 +43,11 @@ export const ItemsListComponent = ({
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {tableData.map(value => (
-            <Table.Row key={value._id}>
+          {tableData.map((value, index) => (
+            <Table.Row key={index}>
               <Table.Cell>{value.itemCategory}</Table.Cell>
               <Table.Cell>
-                {value.material
-                  ? `${value.material.partNumber} ${value.material.description}`
-                  : ''}
+                {value.materialName ? `${value.materialName}` : ''}
               </Table.Cell>
               <Table.Cell>{value.other}</Table.Cell>
               <Table.Cell>{value.description}</Table.Cell>
@@ -65,22 +57,17 @@ export const ItemsListComponent = ({
               <Table.Cell>{value.totalCost}</Table.Cell>
               {showActionsButton && (
                 <Table.Cell>
-                  <Link href={`/requisition/items/edit/${value._id}`}>
-                    <Button icon="edit"></Button>
-                  </Link>
+                  <Button
+                    icon="edit"
+                    onClick={() => {
+                      setOpenEditModal(true)
+                      setSelectedItemIndex(index)
+                    }}
+                  ></Button>
                   <Button
                     color="red"
                     icon="trash"
-                    onClick={() => {
-                      setShowDeleteModal(true)
-                      setSelectedItem({
-                        itemId: value._id,
-                        itemName:
-                          value.material && value.material._id
-                            ? `${value.material.partNumber} ${value.material.description}`
-                            : `${value.other} - ${value.description}`
-                      })
-                    }}
+                    onClick={() => deleteSubItems(index)}
                   ></Button>
                 </Table.Cell>
               )}

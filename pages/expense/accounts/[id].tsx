@@ -120,7 +120,13 @@ const AccountsByExpensePage = ({
 
   // CREATE NEW ITEM
   const addItem = async (data: Record<string, unknown>) => {
+    const alreadyAssigned = dataAccountsByExpense.find(
+      item => item.costtype._id === data.costtype
+    )
     try {
+      if (alreadyAssigned) {
+        throw new Error('Cost Type is already assigned')
+      }
       await createOne('expense/expense-account/create', data, token)
       window.location.reload()
     } catch (error: any) {

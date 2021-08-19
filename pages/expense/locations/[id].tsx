@@ -120,7 +120,13 @@ const LocationsByExpensePage = ({
 
   // CREATE NEW ITEM
   const addItem = async (data: Record<string, unknown>) => {
+    const alreadyAssigned = dataLocationsByExpense.find(
+      item => item.location._id === data.location
+    )
     try {
+      if (alreadyAssigned) {
+        throw new Error('Location is already assigned')
+      }
       await createOne('expense/expense-location/create', data, token)
       window.location.reload()
     } catch (error: any) {

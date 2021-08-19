@@ -48,5 +48,6 @@ export const RequisitionSchema = Joi.object({
   subledger: Joi.optional(),
   approvedBy: Joi.string().required(),
   approvedByStatus: Joi.optional(),
-  approvedByDate: Joi.optional()
+  approvedByDate: Joi.optional(),
+  items: Joi.array().optional()
 })

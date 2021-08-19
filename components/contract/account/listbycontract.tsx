@@ -141,10 +141,10 @@ export const ContractAccountsComponent = ({
             onChange={async (e, { name, value }) => {
               validateSetValue(name, value)
             }}
-            error={validateErrors.location ? true : false}
+            error={validateErrors.account ? true : false}
           />
-          {validateErrors.location && (
-            <Label color="red">{validateErrors.location.message}</Label>
+          {validateErrors.account && (
+            <Label color="red">{validateErrors.account.message}</Label>
           )}
         </Form.Field>
         {error && (

@@ -1,10 +1,11 @@
 import { Product } from '@models/inventory/product.model'
 
 export interface RequisitionItems {
-  _id: string
+  itemId: number
   requisition: string
   itemCategory: string
   material: Product
+  materialName: string
   other: string
   description: string
   unitMeasure: string

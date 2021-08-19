@@ -21,13 +21,7 @@ import {
   fillDropdownOnlyEmail
 } from '@utils/fillDropdown'
 // Services
-import {
-  createOne,
-  deleteOne,
-  getList,
-  getOne,
-  updateOne
-} from '@services/apiRequest'
+import { getList, getOne, updateOne } from '@services/apiRequest'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 import { Requisition } from '@models/requisition/requisition.model'
@@ -55,7 +49,6 @@ import { Message } from 'semantic-ui-react'
 // Components
 import { Layout } from '@components/shared/layout'
 import { ModalComponent } from '@components/shared/modal'
-import { ModalDeleteComponent } from '@components/shared/modalDelete'
 import { HeaderRequisitionFormComponent } from '@components/requisition/requisition/requisition-header'
 import { BodyRequisitionFormComponent } from '@components/requisition/requisition/requisition-body'
 
@@ -68,11 +61,6 @@ export const getServerSideProps: GetServerSideProps = async (
     const params = ctx.params
     const id = params && params.id ? (params.id as string) : ''
     const requisition = await getOne('requisition/read', id, cookie.token)
-    const requisitionItems = await getList(
-      'requisition/items/list',
-      cookie.token,
-      id
-    )
     const approvers = await getList(
       `user/approvers?approver=true&location=${requisition.data.location._id}`,
       cookie.token
@@ -90,7 +78,6 @@ export const getServerSideProps: GetServerSideProps = async (
         permissions: cookie.permissions,
         locations: cookie.locationsApprovers,
         requisition: requisition.data,
-        requisitionItems: requisitionItems.data,
         priorities: priorities.data,
         requestors: requestors.data,
         currencies: currencies.data,
@@ -109,7 +96,6 @@ export const getServerSideProps: GetServerSideProps = async (
         locations:
           cookie && cookie.locationsApprovers ? cookie.locationsApprovers : [],
         requisition: {},
-        requisitionItems: [],
         priorities: [],
         requestors: [],
         currencies: [],
@@ -134,7 +120,6 @@ const ItemsPage = ({
   permissions,
   locations,
   requisition,
-  requisitionItems,
   priorities,
   requestors,
   currencies,
@@ -148,7 +133,6 @@ const ItemsPage = ({
   permissions: Permissions
   locations: Location[]
   requisition: Requisition
-  requisitionItems: any[]
   priorities: Priority[]
   requestors: Requestor[]
   currencies: Currency[]
@@ -294,7 +278,7 @@ const ItemsPage = ({
     }
   }
 
-  // EDIT ITEM - HEADER
+  // EDIT ITEM
   const [modal, setModal] = useState(false)
   const [message, setMessage] = useState('')
   const [accept, setAccept] = useState(false)
@@ -312,7 +296,7 @@ const ItemsPage = ({
       setAccept(true)
     }
     if (getValues('createdByStatus') === 'Closed') {
-      if (requisitionItems.length === 0) {
+      if (getValues('items').length === 0) {
         setModal(true)
         setMessage(
           'You must insert al least one item to the requisition before closed it'
@@ -345,35 +329,7 @@ const ItemsPage = ({
     }
   }
 
-  // ADD SUB ITEMS - BODY
-  const addSubItems = async (data: Record<string, unknown>) => {
-    data.requisition = requisition._id
-    try {
-      await createOne('requisition/items/create', data, token)
-      setErrorOnRequest('')
-      window.location.reload()
-    } catch (error: any) {
-      setErrorOnRequest(error.message)
-    }
-  }
-
-  // DELETE SUB ITEMS
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [selectedItem, setSelectedItem] = useState({
-    itemId: '',
-    itemName: ''
-  })
-  const deleteSubItems = async () => {
-    try {
-      await deleteOne('requisition/items/delete', selectedItem.itemId, token)
-      setErrorOnRequest('')
-      window.location.reload()
-    } catch (error: any) {
-      setErrorOnRequest(error.message)
-    }
-  }
-
-  // VALIDATE IF USER IS LOGGED
+  // VALIDATE IF USER IS LOGGED && INIT VALUES
   useEffect(() => {
     if (!user) {
       router.push('/auth/login')
@@ -442,6 +398,7 @@ const ItemsPage = ({
         dateformat(requisition.dateRequired, 'yyyy-mm-dd')
       )
       setValue('observation', requisition.observation)
+      setValue('items', requisition.items)
     }
   }, [])
 
@@ -488,13 +445,11 @@ const ItemsPage = ({
                   error={errorOnRequest}
                 />
                 <BodyRequisitionFormComponent
-                  tableData={requisitionItems}
+                  validateSetValue={setValue}
+                  items={requisition.items}
                   categoriesDropdown={categoriesDropdown}
                   productsDropdown={productsDropdown}
                   products={products}
-                  setShowDeleteModal={setShowDeleteModal}
-                  setSelectedItem={setSelectedItem}
-                  addSubItems={addSubItems}
                 />
                 <ModalComponent
                   open={modal}
@@ -502,13 +457,6 @@ const ItemsPage = ({
                   message={message}
                   action={editItem}
                   acceptButton={accept}
-                />
-                <ModalDeleteComponent
-                  showModal={showDeleteModal}
-                  setShowModal={setShowDeleteModal}
-                  headerText="Are yo sure to delete?"
-                  deleteItemText={selectedItem.itemName}
-                  deleteAction={deleteSubItems}
                 />
               </>
             ) : (

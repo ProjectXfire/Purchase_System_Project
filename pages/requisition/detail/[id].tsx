@@ -5,7 +5,7 @@ import Head from 'next/head'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 // Services
-import { getList, getOne } from '@services/apiRequest'
+import { getOne } from '@services/apiRequest'
 // Utils
 import { parseCookies } from '@utils/parseCookies'
 // Models
@@ -27,18 +27,12 @@ export const getServerSideProps: GetServerSideProps = async (
     const params = ctx.params
     const id = params && params.id ? (params.id as string) : ''
     const requisition = await getOne('requisition/read', id, cookie.token)
-    const requisitionItems = await getList(
-      'requisition/items/list',
-      cookie.token,
-      id
-    )
     return {
       props: {
         user: cookie.user,
         token: cookie.token,
         permissions: cookie.permissions,
         requisition: requisition.data,
-        requisitionItems: requisitionItems.data,
         error: ''
       }
     }
@@ -49,7 +43,6 @@ export const getServerSideProps: GetServerSideProps = async (
         token: cookie && cookie.token ? cookie.token : '',
         permissions: cookie && cookie.permissions ? cookie.permissions : {},
         requisition: {},
-        requisitionItems: [],
         error: error.message
       }
     }
@@ -58,7 +51,6 @@ export const getServerSideProps: GetServerSideProps = async (
 
 const RequisitionDetailPage = ({
   requisition,
-  requisitionItems,
   user,
   permissions,
   error
@@ -89,10 +81,7 @@ const RequisitionDetailPage = ({
         <Layout permissions={permissions}>
           <main>
             {!error ? (
-              <RequisitionDetailComponent
-                requisition={requisition}
-                requisitionItems={requisitionItems}
-              />
+              <RequisitionDetailComponent requisition={requisition} />
             ) : (
               <Message
                 header={error}

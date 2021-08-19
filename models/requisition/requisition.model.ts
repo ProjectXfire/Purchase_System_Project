@@ -14,6 +14,7 @@ import { Currency } from './currency.model'
 import { Requestor } from './requestor.model'
 import { ShipBy } from './shipby.model'
 import { ShipTo } from './shipto.model'
+import { RequisitionItems } from './requisition.items.model'
 
 export interface Requisition {
   _id: string
@@ -42,4 +43,5 @@ export interface Requisition {
   approvedBy: User | null
   approvedByStatus: string | null
   approvedByDate: Date | null
+  items: RequisitionItems[] | []
 }

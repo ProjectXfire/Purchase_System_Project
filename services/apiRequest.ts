@@ -6,8 +6,6 @@ import axios, { AxiosResponse } from 'axios'
 import { parseCookies } from '@utils/parseCookies'
 import { errorMessage } from '@utils/handleError'
 import { config } from '@utils/environments'
-// Models
-import { Cookie } from '@models/auth/cookie.model'
 
 interface ResponseList {
   user: string
@@ -30,10 +28,11 @@ export const getListSSR = async (
   path: string,
   ctx: GetServerSidePropsContext
 ): Promise<ResponseList> => {
-  const cookie: Cookie = parseCookies(ctx)
-  const params = ctx.params
-  const id = params && params.id ? (params.id as string) : ''
+  let cookie
   try {
+    const params = ctx.params
+    const id = params && params.id ? (params.id as string) : ''
+    cookie = parseCookies(ctx)
     const response = await getList(path, cookie.token, id)
     if (!id) {
       return {
@@ -69,11 +68,11 @@ export const getOneSSR = async (
   path: string,
   ctx: GetServerSidePropsContext
 ): Promise<ResponseOne> => {
-  const params = ctx.params
-
-  const cookie: Cookie = parseCookies(ctx)
-  const id = params && params.id ? (params.id as string) : ''
+  let cookie
   try {
+    cookie = parseCookies(ctx)
+    const params = ctx.params
+    const id = params && params.id ? (params.id as string) : ''
     const response = await getOne(path, id, cookie.token)
     return {
       data: response.data,

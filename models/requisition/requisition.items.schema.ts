@@ -8,6 +8,10 @@ export const RequisitionItemsSchema = Joi.object({
     switch: [{ is: 'Purchase', then: Joi.required() }],
     otherwise: Joi.allow(null)
   }),
+  materialName: Joi.string().when('itemCategory', {
+    switch: [{ is: 'Purchase', then: Joi.required() }],
+    otherwise: Joi.allow('')
+  }),
   other: Joi.string().when('itemCategory', {
     switch: [
       { is: 'Services', then: Joi.required() },

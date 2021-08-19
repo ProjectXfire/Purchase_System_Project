@@ -6,19 +6,17 @@ import Link from 'next/link'
 import dateformat from 'dateformat'
 // Models
 import { Requisition } from '@models/requisition/requisition.model'
-import { RequisitionItems } from '@models/requisition/requisition.items.model'
 // Styles
 import { Header, Icon, Table, Button, Grid, Divider } from 'semantic-ui-react'
 import { TitleLabel } from '@styles/globalStyleComponents'
 // Components
 import { ItemsListComponent } from '@components/requisition/requisition/items'
+import { totalValue } from '@utils/getTotal'
 
 export const RequisitionDetailComponent = ({
-  requisition,
-  requisitionItems
+  requisition
 }: {
   requisition: Requisition
-  requisitionItems: RequisitionItems[]
 }): React.ReactElement => {
   return (
     <>
@@ -250,8 +248,9 @@ export const RequisitionDetailComponent = ({
       </Grid>
       <Divider />
       <ItemsListComponent
-        tableData={requisitionItems}
+        tableData={requisition.items}
         showActionsButton={false}
+        totalOrder={totalValue(requisition.items)}
       />
       <Link
         href={`/requisition/${requisition.location._id}?year=${requisition.year}`}

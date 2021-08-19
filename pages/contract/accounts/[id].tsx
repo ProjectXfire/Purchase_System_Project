@@ -128,7 +128,13 @@ const ContractAccountsPage = ({
 
   // CREATE NEW ITEM
   const addItem = async (data: Record<string, unknown>) => {
+    const alreadyAssigned = dataAccountsByContract.find(
+      item => item.account._id === data.account
+    )
     try {
+      if (alreadyAssigned) {
+        throw new Error('Account is already assigned')
+      }
       await createOne('contract/account/create', data, token)
       window.location.reload()
     } catch (error: any) {
