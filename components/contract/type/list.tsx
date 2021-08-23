@@ -1,6 +1,8 @@
 import React, { ChangeEvent } from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 import { Type } from '@models/contract/type.model'
@@ -41,12 +43,13 @@ export const ContractTypeListComponent = ({
   setSelectedItem: (value: SelectedItems) => void
   setShowModal: (value: boolean) => void
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2" floated="left">
         <Icon name="suitcase" />
         <Header.Content>
-          Contract Type <Header.Subheader>List</Header.Subheader>
+          {t('contract_type')} <Header.Subheader>{t('list')}</Header.Subheader>
         </Header.Content>
       </Header>
       {(permissions.admin || permissions.contract_create) && (
@@ -54,7 +57,7 @@ export const ContractTypeListComponent = ({
           <Header.Content>
             <Link href="/contract/type/create">
               <Button color="blue">
-                <Icon name="plus" /> Add contract type
+                <Icon name="plus" /> {t('add_button_contract_type')}
               </Button>
             </Link>
           </Header.Content>
@@ -62,7 +65,7 @@ export const ContractTypeListComponent = ({
       )}
       <Input
         icon="search"
-        placeholder="Search..."
+        placeholder={t('search_input')}
         value={searchInputValue}
         onChange={e => handleSearchedValues(e)}
       />
@@ -70,12 +73,12 @@ export const ContractTypeListComponent = ({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell onClick={() => sortByColumn('name')}>
-              <HeaderTitle>Name</HeaderTitle>
+              <HeaderTitle>{t('name')}</HeaderTitle>
             </Table.HeaderCell>
             <Table.HeaderCell onClick={() => sortByColumn('description')}>
-              <HeaderTitle>Description</HeaderTitle>
+              <HeaderTitle>{t('description')}</HeaderTitle>
             </Table.HeaderCell>
-            <Table.HeaderCell>Actions</Table.HeaderCell>
+            <Table.HeaderCell>{t('actions')}</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>

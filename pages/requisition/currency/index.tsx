@@ -3,6 +3,8 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+// Providers
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 // Utils
 import { searchItems } from '@utils/searchItems'
 import { sortColumn } from '@utils/sortColumn'
@@ -24,7 +26,13 @@ export const getServerSideProps: GetServerSideProps = async (
 ) => {
   const response = await getListSSR('requisition/currency/list?page=1', ctx)
   return {
-    props: response
+    props: {
+      ...response,
+      ...(await serverSideTranslations(ctx.locale as string, [
+        'menu',
+        'common'
+      ]))
+    }
   }
 }
 
@@ -147,8 +155,6 @@ const CurrencyListPage = ({
             <ModalDeleteComponent
               showModal={showModal}
               setShowModal={setShowModal}
-              headerText="Delete"
-              message="Are you sure to delete?"
               deleteItemText={selectedItem.itemName}
               deleteAction={deleteItem}
             />

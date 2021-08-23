@@ -1,4 +1,6 @@
 import React from 'react'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Models
 import { RequisitionItems } from '@models/requisition/requisition.items.model'
 // Styles
@@ -20,26 +22,29 @@ export const ItemsListComponent = ({
   setOpenEditModal?: any
   setSelectedItemIndex?: any
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
-          Items <Header.Subheader>Products & Services</Header.Subheader>
+          {t('items')} <Header.Subheader>{t('list')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Table compact size="small">
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Category</Table.HeaderCell>
-            <Table.HeaderCell>Material</Table.HeaderCell>
-            <Table.HeaderCell>Services & Others</Table.HeaderCell>
-            <Table.HeaderCell>Description</Table.HeaderCell>
+            <Table.HeaderCell>{t('category')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('product')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('services&others')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('description')}</Table.HeaderCell>
             <Table.HeaderCell>UM</Table.HeaderCell>
-            <Table.HeaderCell>Price</Table.HeaderCell>
-            <Table.HeaderCell>Qtty</Table.HeaderCell>
-            <Table.HeaderCell>Total</Table.HeaderCell>
-            {showActionsButton && <Table.HeaderCell>Actions</Table.HeaderCell>}
+            <Table.HeaderCell>{t('price')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('qtty')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('total')}</Table.HeaderCell>
+            {showActionsButton && (
+              <Table.HeaderCell>{t('actions')}</Table.HeaderCell>
+            )}
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -76,7 +81,9 @@ export const ItemsListComponent = ({
         </Table.Body>
       </Table>
       <Total>
-        <Label color="red">Total: {totalOrder.toFixed(2)}</Label>
+        <Label color="red">
+          {t('total')}: {totalOrder.toFixed(2)}
+        </Label>
       </Total>
     </>
   )

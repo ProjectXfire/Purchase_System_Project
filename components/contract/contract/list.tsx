@@ -1,6 +1,8 @@
 import React, { ChangeEvent } from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 import { Contract } from '@models/contract/contract.model'
@@ -41,12 +43,13 @@ export const ContractListComponent = ({
   setSelectedItem: (value: SelectedItems) => void
   setShowModal: (value: boolean) => void
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2" floated="left">
         <Icon name="suitcase" />
         <Header.Content>
-          Contract <Header.Subheader>List</Header.Subheader>
+          {t('contract')} <Header.Subheader> {t('list')}</Header.Subheader>
         </Header.Content>
       </Header>
       {(permissions.admin || permissions.contract_create) && (
@@ -54,7 +57,7 @@ export const ContractListComponent = ({
           <Header.Content>
             <Link href="/contract/create">
               <Button color="blue">
-                <Icon name="plus" /> Add contract
+                <Icon name="plus" /> {t('add_button_contract')}
               </Button>
             </Link>
           </Header.Content>
@@ -62,7 +65,7 @@ export const ContractListComponent = ({
       )}
       <Input
         icon="search"
-        placeholder="Search..."
+        placeholder={t('search_input')}
         value={searchInputValue}
         onChange={e => handleSearchedValues(e)}
       />
@@ -70,30 +73,30 @@ export const ContractListComponent = ({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell onClick={() => sortByColumn('name')}>
-              <HeaderTitle>Name</HeaderTitle>
+              <HeaderTitle>{t('name')}</HeaderTitle>
             </Table.HeaderCell>
             <Table.HeaderCell onClick={() => sortByColumn('description')}>
-              <HeaderTitle>Description</HeaderTitle>
+              <HeaderTitle>{t('description')}</HeaderTitle>
             </Table.HeaderCell>
             <Table.HeaderCell onClick={() => sortByColumn('areaUnit')}>
-              <HeaderTitle>Area Unit</HeaderTitle>
+              <HeaderTitle>{t('area_unit')}</HeaderTitle>
             </Table.HeaderCell>
             <Table.HeaderCell
               onClick={() => sortByColumn('areaUnitDescription')}
             >
-              <HeaderTitle>Area Unit Description</HeaderTitle>
+              <HeaderTitle>{t('description')}</HeaderTitle>
             </Table.HeaderCell>
             <Table.HeaderCell onClick={() => sortByColumn('clientCode')}>
-              <HeaderTitle>Client Code</HeaderTitle>
+              <HeaderTitle>{t('client_code')}</HeaderTitle>
             </Table.HeaderCell>
             <Table.HeaderCell onClick={() => sortByColumn('location.name')}>
-              <HeaderTitle>Location</HeaderTitle>
+              <HeaderTitle>{t('location')}</HeaderTitle>
             </Table.HeaderCell>
             <Table.HeaderCell onClick={() => sortByColumn('contractType.name')}>
-              <HeaderTitle>Contract Type</HeaderTitle>
+              <HeaderTitle>{t('contract_type')}</HeaderTitle>
             </Table.HeaderCell>
-            <Table.HeaderCell>Actions</Table.HeaderCell>
-            <Table.HeaderCell>Assign</Table.HeaderCell>
+            <Table.HeaderCell>{t('actions')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('assing')}</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -137,7 +140,7 @@ export const ContractListComponent = ({
               </Table.Cell>
               <Table.Cell>
                 <Link href={`/contract/accounts/${value._id}`}>
-                  <Button color="blue">Accounts</Button>
+                  <Button color="blue">{t('accounts')}</Button>
                 </Link>
               </Table.Cell>
             </Table.Row>

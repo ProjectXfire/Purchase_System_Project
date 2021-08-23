@@ -9,9 +9,11 @@ import { useRouter } from 'next/router'
 import { joiResolver } from '@hookform/resolvers/joi'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 // Utils
 import { config } from '@utils/environments'
 import { parseCookies } from '@utils/parseCookies'
+import { errorMessage } from '@utils/handleError'
 // Models
 import { Cookie } from '@models/auth/cookie.model'
 import { LoginSchema } from '@models/auth/login.schema'
@@ -26,7 +28,11 @@ export const getServerSideProps: GetServerSideProps = async (
     cookie = parseCookies(ctx)
     return {
       props: {
-        user: cookie.user
+        user: cookie.user,
+        ...(await serverSideTranslations(ctx.locale as string, [
+          'menu',
+          'common'
+        ]))
       }
     }
   } catch (error: any) {
@@ -74,7 +80,7 @@ const LoginPage: React.FC = ({ user }: any) => {
       setErrorLogin('')
       router.push('/')
     } catch (error: any) {
-      setErrorLogin(error.response.data.message)
+      setErrorLogin(errorMessage(error))
     }
   }
 

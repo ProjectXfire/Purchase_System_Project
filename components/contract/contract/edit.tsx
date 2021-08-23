@@ -3,6 +3,8 @@ import React from 'react'
 import { Controller } from 'react-hook-form'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Styles
 import { Button, Header, Icon, Form, Message, Label } from 'semantic-ui-react'
 
@@ -33,12 +35,13 @@ export const ContractEditComponent = ({
   editItem: (data: Record<string, unknown>) => void
   error: string
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
-          Contract <Header.Subheader>Edit</Header.Subheader>
+          {t('contract')} <Header.Subheader>{t('edit')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Form onSubmit={validateHandleSubmit(editItem)}>
@@ -50,8 +53,8 @@ export const ContractEditComponent = ({
               render={({ field: { value } }) => (
                 <>
                   <Form.Input
-                    label="Contract"
-                    placeholder="Contract"
+                    label={t('name')}
+                    placeholder={t('name')}
                     type="text"
                     name="name"
                     value={value || ''}
@@ -75,8 +78,8 @@ export const ContractEditComponent = ({
               render={({ field: { value } }) => (
                 <>
                   <Form.Input
-                    label="Contract description"
-                    placeholder="Contract description"
+                    label={t('description')}
+                    placeholder={t('description')}
                     type="text"
                     name="description"
                     value={value || ''}
@@ -102,9 +105,9 @@ export const ContractEditComponent = ({
               render={({ field: { value } }) => (
                 <>
                   <Form.Select
-                    label="Area unit"
+                    label={t('area_unit')}
                     name="areaUnit"
-                    placeholder="Select Area Unit"
+                    placeholder={t('select_area_unit')}
                     fluid
                     search
                     value={value}
@@ -130,8 +133,8 @@ export const ContractEditComponent = ({
               render={({ field: { value } }) => (
                 <>
                   <Form.Input
-                    label="Area Unit description"
-                    placeholder="Area Unit description"
+                    label={t('description')}
+                    placeholder={t('description')}
                     type="text"
                     name="areaUnitDescription"
                     value={value || ''}
@@ -157,8 +160,8 @@ export const ContractEditComponent = ({
               render={({ field: { value } }) => (
                 <>
                   <Form.Input
-                    label="Client Code"
-                    placeholder="Client Code"
+                    label={t('client_code')}
+                    placeholder={t('client_code')}
                     type="text"
                     name="clientCode"
                     value={value || ''}
@@ -182,9 +185,9 @@ export const ContractEditComponent = ({
             control={validateControl}
             render={({ field: { value } }) => (
               <Form.Select
-                label="Location"
+                label={t('location')}
                 name="location"
-                placeholder="Select location"
+                placeholder={t('select_location')}
                 fluid
                 search
                 value={value}
@@ -203,9 +206,9 @@ export const ContractEditComponent = ({
             control={validateControl}
             render={({ field: { value } }) => (
               <Form.Select
-                label="Type"
+                label={t('contract_type')}
                 name="contractType"
-                placeholder="Select type"
+                placeholder={t('select_contract_type')}
                 fluid
                 search
                 value={value}
@@ -222,10 +225,10 @@ export const ContractEditComponent = ({
           <Message header={error} icon="times" content="Error" color="red" />
         )}
         <Button type="submit" color="blue">
-          Save
+          {t('save_button')}
         </Button>
         <Link href="/contract">
-          <Button type="button">Back</Button>
+          <Button type="button">{t('back_button')}</Button>
         </Link>
       </Form>
     </>

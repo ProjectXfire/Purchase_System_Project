@@ -6,6 +6,7 @@ import Head from 'next/head'
 // Providers
 import { useForm } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 // Utils
 import { parseCookies } from '@utils/parseCookies'
 import { searchItems } from '@utils/searchItems'
@@ -50,7 +51,11 @@ export const getServerSideProps: GetServerSideProps = async (
         dataAccountsByContract: responseAccountsByContract.data,
         dataContract: responseContract.data,
         dataAccounts: responseAccount.data,
-        error: ''
+        error: '',
+        ...(await serverSideTranslations(ctx.locale as string, [
+          'menu',
+          'common'
+        ]))
       }
     }
   } catch (error: any) {
@@ -218,8 +223,6 @@ const ContractAccountsPage = ({
             <ModalDeleteComponent
               showModal={showModal}
               setShowModal={setShowModal}
-              headerText="Delete"
-              message="Are you sure to delete?"
               deleteItemText={selectedItem.itemName}
               deleteAction={deleteItem}
             />

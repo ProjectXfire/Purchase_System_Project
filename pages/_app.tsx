@@ -1,5 +1,7 @@
 import React from 'react'
 import type { AppProps } from 'next/app'
+// Providers
+import { appWithTranslation } from 'next-i18next'
 // Context provider
 import { ContextProvider } from '@contextProvider/states'
 //  Global Styles
@@ -13,4 +15,4 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
     </ContextProvider>
   )
 }
-export default MyApp
+export default appWithTranslation(MyApp)

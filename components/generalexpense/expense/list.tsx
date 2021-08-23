@@ -1,6 +1,8 @@
 import React, { ChangeEvent } from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 import { Expense } from '@models/expense/expense.model'
@@ -41,12 +43,13 @@ export const ExpenseListComponent = ({
   setSelectedItem: (value: SelectedItems) => void
   setShowModal: (value: boolean) => void
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2" floated="left">
         <Icon name="suitcase" />
         <Header.Content>
-          Expense <Header.Subheader>List</Header.Subheader>
+          {t('expense')} <Header.Subheader>{t('list')}</Header.Subheader>
         </Header.Content>
       </Header>
       {(permissions.admin || permissions.expense_create) && (
@@ -54,7 +57,7 @@ export const ExpenseListComponent = ({
           <Header.Content>
             <Link href="/expense/create">
               <Button color="blue">
-                <Icon name="plus" /> Add expense
+                <Icon name="plus" /> {t('add_button_expense')}
               </Button>
             </Link>
           </Header.Content>
@@ -62,7 +65,7 @@ export const ExpenseListComponent = ({
       )}
       <Input
         icon="search"
-        placeholder="Search..."
+        placeholder={t('search_input')}
         value={searchInputValue}
         onChange={e => handleSearchedValues(e)}
       />
@@ -70,13 +73,13 @@ export const ExpenseListComponent = ({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell onClick={() => sortByColumn('name')}>
-              <HeaderTitle>Name</HeaderTitle>
+              <HeaderTitle>{t('name')}</HeaderTitle>
             </Table.HeaderCell>
             <Table.HeaderCell onClick={() => sortByColumn('description')}>
-              <HeaderTitle>Description</HeaderTitle>
+              <HeaderTitle>{t('description')}</HeaderTitle>
             </Table.HeaderCell>
-            <Table.HeaderCell>Actions</Table.HeaderCell>
-            <Table.HeaderCell>Assign</Table.HeaderCell>
+            <Table.HeaderCell>{t('actions')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('assing')}</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -115,13 +118,13 @@ export const ExpenseListComponent = ({
               </Table.Cell>
               <Table.Cell>
                 <Link href={`/expense/locations/${value._id}`}>
-                  <Button color="blue">Location</Button>
+                  <Button color="blue">{t('locations')}</Button>
                 </Link>
                 <Link href={`/expense/accounts/${value._id}`}>
-                  <Button color="blue">Account</Button>
+                  <Button color="blue">{t('accounts')}</Button>
                 </Link>
                 <Link href={`/expense/subledgers/${value._id}`}>
-                  <Button color="blue">Subledger</Button>
+                  <Button color="blue">{t('subledgers')}</Button>
                 </Link>
               </Table.Cell>
             </Table.Row>

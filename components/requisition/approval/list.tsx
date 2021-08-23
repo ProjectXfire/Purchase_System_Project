@@ -1,6 +1,8 @@
 import React, { ChangeEvent } from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 import { Requisition } from '@models/requisition/requisition.model'
@@ -52,12 +54,14 @@ export const RequisitionApprovalsComponent = ({
   setShowModal: any
   setMessage: any
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2" floated="left">
         <Icon name="suitcase" />
         <Header.Content>
-          Requisition<Header.Subheader>Approval List</Header.Subheader>
+          {t('requisition')}
+          <Header.Subheader>{t('list')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Header as="h2" floated="right">
@@ -65,7 +69,7 @@ export const RequisitionApprovalsComponent = ({
           <Header.Subheader>
             <Dropdown
               clearable
-              placeholder="Select approver status"
+              placeholder={t('select_approver_status')}
               fluid
               search
               selection
@@ -82,7 +86,7 @@ export const RequisitionApprovalsComponent = ({
               <Grid.Column>
                 <Input
                   icon="search"
-                  placeholder="Search..."
+                  placeholder={t('search_input')}
                   value={searchInputValue}
                   onChange={e => handleSearchedValues(e)}
                 />
@@ -96,43 +100,43 @@ export const RequisitionApprovalsComponent = ({
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell onClick={() => sortByColumn('code')}>
-                <HeaderTitle>Req. Code</HeaderTitle>
+                <HeaderTitle>{t('requisition_code')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('description')}>
-                <HeaderTitle>Description</HeaderTitle>
+                <HeaderTitle>{t('description')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('createdBy')}>
-                <HeaderTitle>Created by</HeaderTitle>
+                <HeaderTitle>{t('created_by')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('createdByStatus')}>
-                <HeaderTitle>User Status</HeaderTitle>
+                <HeaderTitle>{t('user_status')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('contract.name')}>
-                <HeaderTitle>Contract</HeaderTitle>
+                <HeaderTitle>{t('contract')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('expense.name')}>
-                <HeaderTitle>Expense</HeaderTitle>
+                <HeaderTitle>{t('expense')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('priority.name')}>
-                <HeaderTitle>Priority</HeaderTitle>
+                <HeaderTitle>{t('priority')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('dateRequired')}>
-                <HeaderTitle>Date required</HeaderTitle>
+                <HeaderTitle>{t('date_required')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell
                 onClick={() => sortByColumn('approvedBy.email')}
               >
-                <HeaderTitle>Approver by</HeaderTitle>
+                <HeaderTitle>{t('approver_by')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell
                 onClick={() => sortByColumn('approvedByStatus')}
               >
-                <HeaderTitle>Approval Status</HeaderTitle>
+                <HeaderTitle>{t('approval_status')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('approvedByDate')}>
-                <HeaderTitle>Approval Date</HeaderTitle>
+                <HeaderTitle>{t('approval_date')}</HeaderTitle>
               </Table.HeaderCell>
-              <Table.HeaderCell>Actions</Table.HeaderCell>
+              <Table.HeaderCell>{t('actions')}</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -207,10 +211,7 @@ export const RequisitionApprovalsComponent = ({
                               status: 'Approved'
                             })
                             setShowModal(true)
-                            setMessage(
-                              `Are your sure to approve this requisition?, after that,
-                              you will not be able to do any action`
-                            )
+                            setMessage(t('approver_message_approved'))
                           }}
                         >
                           <Icon name="check" />
@@ -225,10 +226,7 @@ export const RequisitionApprovalsComponent = ({
                               status: 'Not approved'
                             })
                             setShowModal(true)
-                            setMessage(
-                              `Are your sure to disapprove this requisition?, after that,
-                              you will not be able to do any action`
-                            )
+                            setMessage(t('approver_message_reject'))
                           }}
                         >
                           <Icon name="times" />

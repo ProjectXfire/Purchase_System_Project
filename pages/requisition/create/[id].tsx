@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 // Providers
 import { joiResolver } from '@hookform/resolvers/joi'
 import { AxiosResponse } from 'axios'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 // Utils
 import { parseCookies } from '@utils/parseCookies'
 import {
@@ -66,7 +67,11 @@ export const getServerSideProps: GetServerSideProps = async (
         requestors: requestors.data,
         currencies: currencies.data,
         shipto: shipto.data,
-        shipby: shipby.data
+        shipby: shipby.data,
+        ...(await serverSideTranslations(ctx.locale as string, [
+          'menu',
+          'common'
+        ]))
       }
     }
   } catch (error) {

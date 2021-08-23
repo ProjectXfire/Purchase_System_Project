@@ -1,6 +1,8 @@
 import React, { ChangeEvent } from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 import { ExpenseLocation } from '@models/expense/expense.location.model'
@@ -60,18 +62,19 @@ export const LocationsByExpenseComponent = ({
   setShowModal: (value: boolean) => void
   error: string
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
           {dataExpense.name} {dataExpense.description}
-          <Header.Subheader>List</Header.Subheader>
+          <Header.Subheader>{t('list')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Input
         icon="search"
-        placeholder="Search..."
+        placeholder={t('search_input')}
         value={searchInputValue}
         onChange={e => handleSearchedValues(e)}
       />
@@ -80,12 +83,12 @@ export const LocationsByExpenseComponent = ({
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell onClick={() => sortByColumn('expense.name')}>
-                <HeaderTitle>Expense</HeaderTitle>
+                <HeaderTitle>{t('expense')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('location.name')}>
-                <HeaderTitle>Location</HeaderTitle>
+                <HeaderTitle>{t('location')}</HeaderTitle>
               </Table.HeaderCell>
-              <Table.HeaderCell>Actions</Table.HeaderCell>
+              <Table.HeaderCell>{t('actions')}</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -125,9 +128,9 @@ export const LocationsByExpenseComponent = ({
       <Form onSubmit={validateHandleSubmit(addItem)}>
         <Form.Field>
           <Form.Select
-            label="Location"
+            label={t('location')}
             name="location"
-            placeholder="Select location"
+            placeholder={t('select_location')}
             fluid
             search
             options={locationDropdown}
@@ -144,10 +147,10 @@ export const LocationsByExpenseComponent = ({
           <Message header={error} icon="times" content="Error" color="red" />
         )}
         <Button type="submit" color="blue">
-          Add
+          {t('add_button_location')}
         </Button>
         <Link href="/expense">
-          <Button type="button">Back</Button>
+          <Button type="button">{t('back_button')}</Button>
         </Link>
       </Form>
     </>

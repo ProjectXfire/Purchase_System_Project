@@ -4,6 +4,9 @@ import React, { useEffect } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+// Providers
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 // Utils
 import { parseCookies } from '@utils/parseCookies'
 // Models
@@ -20,7 +23,11 @@ export const getServerSideProps: GetServerSideProps = async (
     return {
       props: {
         user: cookie.user,
-        permissions: cookie.permissions
+        permissions: cookie.permissions,
+        ...(await serverSideTranslations(ctx.locale as string, [
+          'menu',
+          'common'
+        ]))
       }
     }
   } catch (error) {
@@ -41,6 +48,7 @@ const Home = ({
   permissions: Permissions
 }): React.ReactElement => {
   const router = useRouter()
+  const { t } = useTranslation('common')
 
   useEffect(() => {
     if (!user) {
@@ -58,6 +66,7 @@ const Home = ({
       {user && (
         <Layout permissions={permissions}>
           <main>
+            <h1>{t('title')}</h1>
             <div>Welcome {user}</div>
           </main>
         </Layout>

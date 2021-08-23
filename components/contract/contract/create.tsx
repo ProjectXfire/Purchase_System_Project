@@ -2,6 +2,8 @@
 import React from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Styles
 import { Button, Header, Icon, Form, Message, Label } from 'semantic-ui-react'
 
@@ -30,20 +32,21 @@ export const ContractCreateComponent = ({
   createItem: (data: Record<string, unknown>) => void
   error: string
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
-          Contract <Header.Subheader>Create</Header.Subheader>
+          {t('contract')} <Header.Subheader>{t('create')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Form onSubmit={validateHandleSubmit(createItem)}>
         <Form.Group widths="equal">
           <Form.Field>
             <Form.Input
-              label="Contract"
-              placeholder="Contract"
+              label={t('name')}
+              placeholder={t('name')}
               type="text"
               name="name"
               onChange={async (e, { name, value }) => {
@@ -58,8 +61,8 @@ export const ContractCreateComponent = ({
           </Form.Field>
           <Form.Field>
             <Form.Input
-              label="Contract description"
-              placeholder="Contract description"
+              label={t('description')}
+              placeholder={t('description')}
               type="text"
               name="description"
               onChange={async (e, { name, value }) => {
@@ -76,9 +79,9 @@ export const ContractCreateComponent = ({
         <Form.Group widths="equal">
           <Form.Field>
             <Form.Select
-              label="Area unit"
+              label={t('area_unit')}
               name="areaUnit"
-              placeholder="Select Area Unit"
+              placeholder={t('area_unit')}
               fluid
               search
               options={areaUnitDropdown}
@@ -95,8 +98,8 @@ export const ContractCreateComponent = ({
           </Form.Field>
           <Form.Field>
             <Form.Input
-              label="Area Unit description"
-              placeholder="Area Unit description"
+              label={t('description')}
+              placeholder={t('description')}
               type="text"
               name="areaUnitDescription"
               onChange={async (e, { name, value }) => {
@@ -113,8 +116,8 @@ export const ContractCreateComponent = ({
         <Form.Group widths="equal">
           <Form.Field>
             <Form.Input
-              label="Client Code"
-              placeholder="Client Code"
+              label={t('client_code')}
+              placeholder={t('client_code')}
               type="text"
               name="clientCode"
               onChange={async (e, { name, value }) => {
@@ -125,9 +128,9 @@ export const ContractCreateComponent = ({
         </Form.Group>
         <Form.Field>
           <Form.Select
-            label="Location"
+            label={t('location')}
             name="location"
-            placeholder="Select location"
+            placeholder={t('select_location')}
             fluid
             search
             options={locationDropdown}
@@ -142,9 +145,9 @@ export const ContractCreateComponent = ({
         </Form.Field>
         <Form.Field>
           <Form.Select
-            label="Type"
+            label={t('contract_type')}
             name="contractType"
-            placeholder="Select type"
+            placeholder={t('select_contract_type')}
             fluid
             search
             options={typeDropdown}
@@ -161,10 +164,10 @@ export const ContractCreateComponent = ({
           <Message header={error} icon="times" content="Error" color="red" />
         )}
         <Button type="submit" color="blue">
-          Save
+          {t('save_button')}
         </Button>
         <Link href="/contract">
-          <Button type="button">Back</Button>
+          <Button type="button">{t('back_button')}</Button>
         </Link>
       </Form>
     </>

@@ -1,6 +1,8 @@
 import React, { ChangeEvent } from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 import { ExpenseAccount } from '@models/expense/expense.account.model'
@@ -60,18 +62,19 @@ export const AccountsByExpenseComponent = ({
   setShowModal: (value: boolean) => void
   error: string
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
           {dataExpense.name} {dataExpense.description}
-          <Header.Subheader>List</Header.Subheader>
+          <Header.Subheader>{t('list')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Input
         icon="search"
-        placeholder="Search..."
+        placeholder={t('search_input')}
         value={searchInputValue}
         onChange={e => handleSearchedValues(e)}
       />
@@ -80,10 +83,10 @@ export const AccountsByExpenseComponent = ({
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell onClick={() => sortByColumn('expense.name')}>
-                <HeaderTitle>Expense</HeaderTitle>
+                <HeaderTitle>{t('expense')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('costtype.name')}>
-                <HeaderTitle>Cost Type</HeaderTitle>
+                <HeaderTitle>{t('costtype')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell>Actions</Table.HeaderCell>
             </Table.Row>
@@ -127,9 +130,9 @@ export const AccountsByExpenseComponent = ({
       <Form onSubmit={validateHandleSubmit(addItem)}>
         <Form.Field>
           <Form.Select
-            label="Cost Type"
+            label={t('costtype')}
             name="costtype"
-            placeholder="Select cost type"
+            placeholder={t('select_costtype')}
             fluid
             search
             options={accountDropdown}
@@ -146,10 +149,10 @@ export const AccountsByExpenseComponent = ({
           <Message header={error} icon="times" content="Error" color="red" />
         )}
         <Button type="submit" color="blue">
-          Add
+          {t('add_button_expense')}
         </Button>
         <Link href="/expense">
-          <Button type="button">Back</Button>
+          <Button type="button"> {t('back_button')}</Button>
         </Link>
       </Form>
     </>

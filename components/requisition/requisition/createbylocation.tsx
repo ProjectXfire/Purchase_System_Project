@@ -3,6 +3,8 @@ import React from 'react'
 import { Controller } from 'react-hook-form'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Styles
 import {
   Button,
@@ -74,13 +76,16 @@ export const RequisitionByLocationCreateComponent = ({
   createItem: () => void
   error: string
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
-          Requisition{' '}
-          <Header.Subheader>Create - {locationName}</Header.Subheader>
+          {t('requisition')}
+          <Header.Subheader>
+            {t('create')} - {locationName}
+          </Header.Subheader>
         </Header.Content>
       </Header>
       <Form onSubmit={validateHandleSubmit(createItem)}>
@@ -88,16 +93,16 @@ export const RequisitionByLocationCreateComponent = ({
           <Form.Group widths="equal">
             <Form.Input
               fluid
-              label="Created by"
-              placeholder="Create by"
+              label={t('created_by')}
+              placeholder={t('created_by')}
               name="createdBy"
               readOnly={true}
               value={user || ''}
             />
             <Form.Input
               fluid
-              label="Description"
-              placeholder="Req. description"
+              label={t('description')}
+              placeholder={t('description')}
               name="description"
               onChange={async (e, { name, value }) => {
                 validateSetValue(name, value)
@@ -109,7 +114,7 @@ export const RequisitionByLocationCreateComponent = ({
         {contractsDropdown.length > 0 && selected.selectedContract && (
           <>
             <Label basic size="large" color="blue">
-              Contract
+              {t('contract')}
             </Label>
             <Segment>
               <Form.Group widths="equal">
@@ -120,9 +125,9 @@ export const RequisitionByLocationCreateComponent = ({
                     <Form.Select
                       fluid
                       search
-                      label="Contract"
+                      label={t('contract')}
                       options={contractsDropdown}
-                      placeholder="Select contract"
+                      placeholder={t('select_contract')}
                       name="contract"
                       value={value}
                       onChange={async (e, { name, value }) => {
@@ -143,9 +148,9 @@ export const RequisitionByLocationCreateComponent = ({
                     <Form.Select
                       fluid
                       search
-                      label="Account"
+                      label={t('account')}
                       options={contractAccountDropdown}
-                      placeholder="Select account"
+                      placeholder={t('select_account')}
                       name="account"
                       value={value}
                       onChange={async (e, { name, value }) => {
@@ -162,7 +167,7 @@ export const RequisitionByLocationCreateComponent = ({
         {expensesDropdown.length > 0 && selected.selectedExpense && (
           <>
             <Label basic size="large" color="blue">
-              Expense
+              {t('expense')}
             </Label>
             <Segment>
               <Form.Group widths="equal">
@@ -173,9 +178,9 @@ export const RequisitionByLocationCreateComponent = ({
                     <Form.Select
                       fluid
                       search
-                      label="Expense"
+                      label={t('expense')}
                       options={expensesDropdown}
-                      placeholder="Select expense"
+                      placeholder={t('select_expense')}
                       name="expense"
                       value={value}
                       onChange={async (e, { name, value }) => {
@@ -196,9 +201,9 @@ export const RequisitionByLocationCreateComponent = ({
                     <Form.Select
                       fluid
                       search
-                      label="Account"
+                      label={t('costtype')}
                       options={expenseAccountDropdown}
-                      placeholder="Select account"
+                      placeholder={t('select_costtype')}
                       name="costtype"
                       value={value}
                       onChange={async (e, { name, value }) => {
@@ -217,9 +222,9 @@ export const RequisitionByLocationCreateComponent = ({
                       fluid
                       search
                       clearable
-                      label="Subledger"
+                      label={t('subledger')}
                       options={expenseSubledgerDropdown}
-                      placeholder="Select subledger"
+                      placeholder={t('select_subledger')}
                       name="subledger"
                       value={value}
                       onChange={async (e, { name, value }) => {
@@ -234,16 +239,16 @@ export const RequisitionByLocationCreateComponent = ({
           </>
         )}
         <Label basic size="large" color="blue">
-          Priority
+          {t('priority')}
         </Label>
         <Segment>
           <Form.Group widths="equal">
             <Form.Select
               fluid
               search
-              label="Priority"
+              label={t('priority')}
               options={prioritiesDropdown}
-              placeholder="Select priority"
+              placeholder={t('select_priority')}
               name="priority"
               onChange={async (e, { name, value }) => {
                 validateSetValue(name, value)
@@ -252,8 +257,8 @@ export const RequisitionByLocationCreateComponent = ({
             />
             <Form.Input
               fluid
-              label="Justification"
-              placeholder="Justify the priority"
+              label={t('justify')}
+              placeholder={t('justify')}
               name="priorityJustification"
               onChange={async (e, { name, value }) => {
                 validateSetValue(name, value)
@@ -263,16 +268,16 @@ export const RequisitionByLocationCreateComponent = ({
           </Form.Group>
         </Segment>
         <Label basic size="large" color="blue">
-          Shipments
+          {t('shipments')}
         </Label>
         <Segment>
           <Form.Group widths="equal">
             <Form.Select
               fluid
               search
-              label="Requestor"
+              label={t('requestor')}
               options={requestorsDropdown}
-              placeholder="Select requestor"
+              placeholder={t('select_requestor')}
               name="requestor"
               onChange={async (e, { name, value }) => {
                 validateSetValue(name, value)
@@ -282,9 +287,9 @@ export const RequisitionByLocationCreateComponent = ({
             <Form.Select
               fluid
               search
-              label="Currency"
+              label={t('currency')}
               options={currenciesDropdown}
-              placeholder="Select currency"
+              placeholder={t('select_currency')}
               name="currency"
               onChange={async (e, { name, value }) => {
                 validateSetValue(name, value)
@@ -296,9 +301,9 @@ export const RequisitionByLocationCreateComponent = ({
             <Form.Select
               fluid
               search
-              label="Ship to"
+              label={t('shipto')}
               options={shiptoDropdown}
-              placeholder="Select ship to"
+              placeholder={t('select_shipto')}
               name="shipTo"
               onChange={async (e, { name, value }) => {
                 validateSetValue(name, value)
@@ -308,9 +313,9 @@ export const RequisitionByLocationCreateComponent = ({
             <Form.Select
               fluid
               search
-              label="Ship by"
+              label={t('shipby')}
               options={shipbyDropdown}
-              placeholder="Select ship by"
+              placeholder={t('select_shipby')}
               name="shipBy"
               onChange={async (e, { name, value }) => {
                 validateSetValue(name, value)
@@ -320,12 +325,12 @@ export const RequisitionByLocationCreateComponent = ({
           </Form.Group>
         </Segment>
         <Label basic size="large" color="blue">
-          Observations
+          {t('observations')}
         </Label>
         <Segment basic>
           <Form.Group widths="equal">
             <TextArea
-              placeholder="Any observation to the requisition"
+              placeholder={t('observations_placeholder')}
               name="observation"
               onChange={async (e, { name, value }) => {
                 validateSetValue(name, value)
@@ -345,10 +350,10 @@ export const RequisitionByLocationCreateComponent = ({
                 <Form.Select
                   fluid
                   search
-                  label="User Status"
+                  label={t('user_status')}
                   disabled
                   options={userStatusDropdown}
-                  placeholder="Select status"
+                  placeholder={t('select_user_status')}
                   name="createdByStatus"
                   value={value}
                   onChange={async (e, { name, value }) => {
@@ -360,8 +365,8 @@ export const RequisitionByLocationCreateComponent = ({
             />
             <Form.Input
               fluid
-              label="Date required"
-              placeholder="Date required"
+              label={t('date_required')}
+              placeholder={t('date_required')}
               name="dateRequired"
               type="date"
               onChange={async (e, { name, value }) => {
@@ -372,7 +377,7 @@ export const RequisitionByLocationCreateComponent = ({
           </Form.Group>
         </Segment>
         <Label basic size="large" color="blue">
-          Approver
+          {t('approver')}
         </Label>
         <Segment>
           <Form.Group widths="equal">
@@ -383,9 +388,9 @@ export const RequisitionByLocationCreateComponent = ({
                 <Form.Select
                   fluid
                   search
-                  label="Approver"
+                  label={t('approver')}
                   options={approversDropdown}
-                  placeholder="Select approver"
+                  placeholder={t('select_approver')}
                   name="approvedBy"
                   value={value}
                   onChange={async (e, { name, value }) => {
@@ -406,12 +411,12 @@ export const RequisitionByLocationCreateComponent = ({
           />
         )}
         <Button type="submit" color="blue">
-          Save
+          {t('save_button')}
         </Button>
         <Link
           href={`/requisition/${locationId}?year=${new Date().getFullYear()}`}
         >
-          <Button type="button">Back</Button>
+          <Button type="button">{t('back_button')}</Button>
         </Link>
       </Form>
     </>

@@ -7,6 +7,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 // Providers
 import { joiResolver } from '@hookform/resolvers/joi'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 // Utils
 import { parseCookies } from '@utils/parseCookies'
 import { fillDropdown, fillDropdownCode } from '@utils/fillDropdown'
@@ -44,7 +45,11 @@ export const getServerSideProps: GetServerSideProps = async (
         permissions: cookie.permissions,
         dataLocation: responseLocation.data,
         dataType: responseContractType.data,
-        error: ''
+        error: '',
+        ...(await serverSideTranslations(ctx.locale as string, [
+          'menu',
+          'common'
+        ]))
       }
     }
   } catch (error: any) {

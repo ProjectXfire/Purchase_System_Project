@@ -4,6 +4,8 @@ import React, { useEffect } from 'react'
 import Head from 'next/head'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
+// Providers
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 // Services
 import { getOne } from '@services/apiRequest'
 // Utils
@@ -33,7 +35,11 @@ export const getServerSideProps: GetServerSideProps = async (
         token: cookie.token,
         permissions: cookie.permissions,
         requisition: requisition.data,
-        error: ''
+        error: '',
+        ...(await serverSideTranslations(ctx.locale as string, [
+          'menu',
+          'common'
+        ]))
       }
     }
   } catch (error: any) {

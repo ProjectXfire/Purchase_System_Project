@@ -4,6 +4,7 @@ import Link from 'next/link'
 // Providers
 import dateformat from 'dateformat'
 import ReactHTMLTableToExcel from 'react-html-table-to-excel'
+import { useTranslation } from 'next-i18next'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 import { Requisition } from '@models/requisition/requisition.model'
@@ -54,12 +55,14 @@ export const RequisitionListByLocationComponent = ({
   setSelectedItem: (value: SelectedItems) => void
   setShowModal: (value: boolean) => void
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2" floated="left">
         <Icon name="suitcase" />
         <Header.Content>
-          Requisition<Header.Subheader>List</Header.Subheader>
+          {t('requisition')}
+          <Header.Subheader>{t('list')}</Header.Subheader>
         </Header.Content>
       </Header>
       {(permissions.admin || permissions.req_create) && (
@@ -71,7 +74,7 @@ export const RequisitionListByLocationComponent = ({
               filename="requisitionsExcel"
               className="ui primary button"
               sheet="data"
-              buttonText="Export to excel"
+              buttonText={t('export_button_excel')}
             />
             <Link
               href={`/requisition/create/${
@@ -79,7 +82,7 @@ export const RequisitionListByLocationComponent = ({
               }`}
             >
               <Button color="blue">
-                <Icon name="plus" /> Add requisition
+                <Icon name="plus" /> {t('add_button_requisition')}
               </Button>
             </Link>
           </Header.Content>
@@ -92,7 +95,7 @@ export const RequisitionListByLocationComponent = ({
               <Grid.Column>
                 <Input
                   icon="search"
-                  placeholder="Search..."
+                  placeholder={t('search_input')}
                   value={searchInputValue}
                   onChange={e => handleSearchedValues(e)}
                 />
@@ -106,59 +109,59 @@ export const RequisitionListByLocationComponent = ({
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell onClick={() => sortByColumn('code')}>
-                <HeaderTitle>Req. Code</HeaderTitle>
+                <HeaderTitle>{t('requisition_code')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('description')}>
-                <HeaderTitle>Description</HeaderTitle>
+                <HeaderTitle>{t('description')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('createdBy')}>
-                <HeaderTitle>Created by</HeaderTitle>
+                <HeaderTitle>{t('created_by')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('createdByStatus')}>
-                <HeaderTitle>User Status</HeaderTitle>
+                <HeaderTitle>{t('user_status')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell
                 onClick={() => sortByColumn('contract.contractType.name')}
               >
-                <HeaderTitle>Type</HeaderTitle>
+                <HeaderTitle>{t('contract_type')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('contract.name')}>
-                <HeaderTitle>Contract</HeaderTitle>
+                <HeaderTitle>{t('contract')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell
                 onClick={() => sortByColumn('contract.description')}
               >
-                <HeaderTitle>Description</HeaderTitle>
+                <HeaderTitle>{t('description')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('expense.name')}>
-                <HeaderTitle>Expense</HeaderTitle>
+                <HeaderTitle>{t('expense')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell
                 onClick={() => sortByColumn('expense.description')}
               >
-                <HeaderTitle>Description</HeaderTitle>
+                <HeaderTitle>{t('description')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('priority.name')}>
-                <HeaderTitle>Priority</HeaderTitle>
+                <HeaderTitle>{t('priority')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('dateRequired')}>
-                <HeaderTitle>Date required</HeaderTitle>
+                <HeaderTitle>{t('date_required')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell
                 onClick={() => sortByColumn('approvedBy.email')}
               >
-                <HeaderTitle>Approver by</HeaderTitle>
+                <HeaderTitle>{t('approver_by')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell
                 onClick={() => sortByColumn('approvedByStatus')}
               >
-                <HeaderTitle>Approval Status</HeaderTitle>
+                <HeaderTitle>{t('approval_status')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('approvedByDate')}>
-                <HeaderTitle>Approval Date</HeaderTitle>
+                <HeaderTitle>{t('approval_date')}</HeaderTitle>
               </Table.HeaderCell>
-              <Table.HeaderCell>Actions</Table.HeaderCell>
-              <Table.HeaderCell>Items</Table.HeaderCell>
+              <Table.HeaderCell>{t('actions')}</Table.HeaderCell>
+              <Table.HeaderCell>{t('items')}</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -253,7 +256,7 @@ export const RequisitionListByLocationComponent = ({
                       value.createdByStatus === 'Open')) && (
                     <Link href={`/requisition/items/${value._id}`}>
                       <Button size="mini" color="blue">
-                        Edit
+                        {t('edit')}
                       </Button>
                     </Link>
                   )}

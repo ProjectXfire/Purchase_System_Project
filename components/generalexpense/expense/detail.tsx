@@ -2,6 +2,8 @@
 import React from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Models
 import { Expense } from '@models/expense/expense.model'
 // Styles
@@ -12,28 +14,29 @@ export const ExpenseDetailComponent = ({
 }: {
   data: Expense
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
-          Expense <Header.Subheader>Detail</Header.Subheader>
+          {t('expense')} <Header.Subheader>{t('detail')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Table definition>
         <Table.Body>
           <Table.Row>
-            <Table.Cell width="3">Name</Table.Cell>
+            <Table.Cell width="3">{t('name')}</Table.Cell>
             <Table.Cell>{data.name}</Table.Cell>
           </Table.Row>
           <Table.Row>
-            <Table.Cell>Description</Table.Cell>
+            <Table.Cell>{t('description')}</Table.Cell>
             <Table.Cell>{data.description}</Table.Cell>
           </Table.Row>
         </Table.Body>
       </Table>
       <Link href="/expense">
-        <Button type="button">Back</Button>
+        <Button type="button">{t('back_button')}</Button>
       </Link>
     </>
   )

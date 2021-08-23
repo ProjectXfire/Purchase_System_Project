@@ -2,6 +2,8 @@
 import React from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 // Styles
@@ -21,6 +23,7 @@ export const SidebarComponent = ({
   openRequisitionModal: () => void
   logout: any
 }): React.ReactElement => {
+  const { t } = useTranslation('menu')
   return (
     <Sidebar
       as={Menu}
@@ -36,26 +39,26 @@ export const SidebarComponent = ({
         <Link href="/">Home</Link>
       </Menu.Item>
       {(permissions.admin || permissions.account_read) && (
-        <Dropdown text="Account" item>
+        <Dropdown text={t('account')} item>
           <Dropdown.Menu>
             <Dropdown.Item>
               <Link href="/chartofaccount/account">
-                <Anchor>Account</Anchor>
+                <Anchor>{t('account')}</Anchor>
               </Link>
             </Dropdown.Item>
             <Dropdown.Item>
               <Link href="/chartofaccount/costcode">
-                <Anchor>Cost Code</Anchor>
+                <Anchor>{t('costcode')}</Anchor>
               </Link>
             </Dropdown.Item>
             <Dropdown.Item>
               <Link href="/chartofaccount/costtype">
-                <Anchor>Cost Type</Anchor>
+                <Anchor>{t('costtype')}</Anchor>
               </Link>
             </Dropdown.Item>
             <Dropdown.Item>
               <Link href="/chartofaccount/budget">
-                <Anchor>Budget</Anchor>
+                <Anchor>{t('budget')}</Anchor>
               </Link>
             </Dropdown.Item>
           </Dropdown.Menu>
@@ -63,25 +66,25 @@ export const SidebarComponent = ({
       )}
       {(permissions.admin || permissions.contract_read) && (
         <>
-          <Dropdown text="Contract" item>
+          <Dropdown text={t('contract')} item>
             <Dropdown.Menu>
               <Dropdown.Item>
                 <Link href="/contract">
-                  <Anchor>Contract</Anchor>
+                  <Anchor>{t('contract')}</Anchor>
                 </Link>
               </Dropdown.Item>
               <Dropdown.Item>
                 <Link href="/contract/type">
-                  <Anchor>Type</Anchor>
+                  <Anchor>{t('type')}</Anchor>
                 </Link>
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-          <Dropdown text="Location" item>
+          <Dropdown text={t('location')} item>
             <Dropdown.Menu>
               <Dropdown.Item>
                 <Link href="/contract/location">
-                  <Anchor>Location</Anchor>
+                  <Anchor>{t('location')}</Anchor>
                 </Link>
               </Dropdown.Item>
             </Dropdown.Menu>
@@ -89,73 +92,68 @@ export const SidebarComponent = ({
         </>
       )}
       {(permissions.admin || permissions.expense_read) && (
-        <Dropdown text="Expense" item>
+        <Dropdown text={t('expense')} item>
           <Dropdown.Menu>
             <Dropdown.Item>
               <Link href="/expense">
-                <Anchor>Expense</Anchor>
+                <Anchor>{t('expense')}</Anchor>
               </Link>
             </Dropdown.Item>
             <Dropdown.Item>
               <Link href="/subledger">
-                <Anchor>Subledger</Anchor>
+                <Anchor>{t('subledger')}</Anchor>
               </Link>
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       )}
       {(permissions.admin || permissions.req_read) && (
-        <Dropdown text="Requisition" item>
+        <Dropdown text={t('requisition')} item>
           <Dropdown.Menu>
             <Dropdown.Item onClick={() => openRequisitionModal()}>
-              Requisition
+              {t('requisition')}
             </Dropdown.Item>
             {(permissions.admin || permissions.approval_read) && (
               <Dropdown.Item>
                 <Link href="/requisition/approvals/list">
-                  <Anchor>Approvals</Anchor>
+                  <Anchor>{t('approvals')}</Anchor>
                 </Link>
               </Dropdown.Item>
             )}
             <Dropdown.Item>
               <Link href="/requisition/shipto">
-                <Anchor>Ship to</Anchor>
+                <Anchor>{t('ship_to')}</Anchor>
               </Link>
             </Dropdown.Item>
             <Dropdown.Item>
               <Link href="/requisition/shipby">
-                <Anchor>Ship by</Anchor>
+                <Anchor>{t('ship_by')}</Anchor>
               </Link>
             </Dropdown.Item>
             <Dropdown.Item>
               <Link href="/requisition/requestor">
-                <Anchor>Requestor</Anchor>
+                <Anchor>{t('requestor')}</Anchor>
               </Link>
             </Dropdown.Item>
             <Dropdown.Item>
               <Link href="/requisition/currency">
-                <Anchor>Currency</Anchor>
+                <Anchor>{t('currency')}</Anchor>
               </Link>
             </Dropdown.Item>
             <Dropdown.Item>
               <Link href="/requisition/priority">
-                <Anchor>Priority</Anchor>
+                <Anchor>{t('priority')}</Anchor>
               </Link>
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       )}
       {permissions.admin && (
-        <Dropdown text="Items" item>
+        <Dropdown text={t('product')} item>
           <Dropdown.Menu>
             <Dropdown.Item>
               <Link href="/inventory/product">
-                <Anchor>Product</Anchor>
-              </Link>
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <Link href="/inventory/category">
-                <Anchor>Category</Anchor>
+                <Anchor>{t('product')}</Anchor>
               </Link>
             </Dropdown.Item>
           </Dropdown.Menu>

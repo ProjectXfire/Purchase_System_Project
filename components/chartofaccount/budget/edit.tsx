@@ -2,6 +2,8 @@
 import React from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Styles
 import { Button, Form, Header, Icon, Label, Message } from 'semantic-ui-react'
 
@@ -27,19 +29,20 @@ export const BudgetEditComponent = ({
   editItem: () => void
   error: string
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
-          Budget <Header.Subheader>Edit</Header.Subheader>
+          {t('budget')} <Header.Subheader>{t('edit')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Form onSubmit={validateHandleSubmit(editItem)}>
         <Form.Field>
-          <label>Name</label>
+          <label>{t('name')}</label>
           <input
-            placeholder="Budget"
+            placeholder={t('name')}
             type="text"
             name="name"
             {...validateRegister('name')}
@@ -53,9 +56,9 @@ export const BudgetEditComponent = ({
           )}
         </Form.Field>
         <Form.Field>
-          <label>Description</label>
+          <label>{t('description')}</label>
           <input
-            placeholder="Budget description"
+            placeholder={t('description')}
             type="text"
             name="description"
             {...validateRegister('description')}
@@ -77,10 +80,10 @@ export const BudgetEditComponent = ({
           />
         )}
         <Button type="submit" color="blue">
-          Save
+          {t('save_button')}
         </Button>
         <Link href="/chartofaccount/budget">
-          <Button type="button">Back</Button>
+          <Button type="button">{t('back_button')}</Button>
         </Link>
       </Form>
     </>

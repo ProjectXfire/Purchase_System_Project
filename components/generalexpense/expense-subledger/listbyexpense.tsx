@@ -1,6 +1,8 @@
 import React, { ChangeEvent } from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 import { ExpenseSubledger } from '@models/expense/expense.subledger.model'
@@ -60,18 +62,19 @@ export const SubledgersByExpenseComponent = ({
   setShowModal: (value: boolean) => void
   error: string
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
           {dataExpense.name} {dataExpense.description}
-          <Header.Subheader>List</Header.Subheader>
+          <Header.Subheader>{t('list')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Input
         icon="search"
-        placeholder="Search..."
+        placeholder={t('search_input')}
         value={searchInputValue}
         onChange={e => handleSearchedValues(e)}
       />
@@ -80,12 +83,12 @@ export const SubledgersByExpenseComponent = ({
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell onClick={() => sortByColumn('expense.name')}>
-                <HeaderTitle>Expense</HeaderTitle>
+                <HeaderTitle>{t('expense')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell onClick={() => sortByColumn('subledger.name')}>
-                <HeaderTitle>Subledger</HeaderTitle>
+                <HeaderTitle>{t('subledger')}</HeaderTitle>
               </Table.HeaderCell>
-              <Table.HeaderCell>Actions</Table.HeaderCell>
+              <Table.HeaderCell>{t('actions')}</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -125,9 +128,9 @@ export const SubledgersByExpenseComponent = ({
       <Form onSubmit={validateHandleSubmit(addItem)}>
         <Form.Field>
           <Form.Select
-            label="Subledger"
+            label={t('subledger')}
             name="subledger"
-            placeholder="Select subledger"
+            placeholder={t('select_subledger')}
             fluid
             search
             options={subledgerDropdown}
@@ -144,10 +147,10 @@ export const SubledgersByExpenseComponent = ({
           <Message header={error} icon="times" content="Error" color="red" />
         )}
         <Button type="submit" color="blue">
-          Add
+          {t('add_button_subledger')}
         </Button>
         <Link href="/expense">
-          <Button type="button">Back</Button>
+          <Button type="button">{t('back_button')}</Button>
         </Link>
       </Form>
     </>

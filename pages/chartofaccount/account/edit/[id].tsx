@@ -7,6 +7,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 // Providers
 import { joiResolver } from '@hookform/resolvers/joi'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 // Utils
 import { parseCookies } from '@utils/parseCookies'
 import { fillDropdown } from '@utils/fillDropdown'
@@ -52,7 +53,11 @@ export const getServerSideProps: GetServerSideProps = async (
         dataCostCode: responseCostCode.data,
         dataCostType: responseCostType.data,
         dataBudget: responseBudget.data,
-        error: ''
+        error: '',
+        ...(await serverSideTranslations(ctx.locale as string, [
+          'menu',
+          'common'
+        ]))
       }
     }
   } catch (error: any) {

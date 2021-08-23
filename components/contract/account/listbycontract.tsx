@@ -1,6 +1,8 @@
 import React, { ChangeEvent } from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 import { ContractAccount } from '@models/contract/contract.account.model'
@@ -60,18 +62,19 @@ export const ContractAccountsComponent = ({
   setShowModal: (value: boolean) => void
   error: string
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
           {dataContract.name} {dataContract.description}
-          <Header.Subheader>List</Header.Subheader>
+          <Header.Subheader>{t('list')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Input
         icon="search"
-        placeholder="Search..."
+        placeholder={t('search_input')}
         value={searchInputValue}
         onChange={e => handleSearchedValues(e)}
       />
@@ -80,14 +83,14 @@ export const ContractAccountsComponent = ({
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell onClick={() => sortByColumn('contract.name')}>
-                <HeaderTitle>Contract</HeaderTitle>
+                <HeaderTitle>{t('contract')}</HeaderTitle>
               </Table.HeaderCell>
               <Table.HeaderCell
                 onClick={() => sortByColumn('account.costcode.name')}
               >
-                <HeaderTitle>Account</HeaderTitle>
+                <HeaderTitle>{t('account')}</HeaderTitle>
               </Table.HeaderCell>
-              <Table.HeaderCell>Actions</Table.HeaderCell>
+              <Table.HeaderCell>{t('actions')}</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -132,9 +135,9 @@ export const ContractAccountsComponent = ({
       <Form onSubmit={validateHandleSubmit(addItem)}>
         <Form.Field>
           <Form.Select
-            label="Account"
+            label={t('account')}
             name="account"
-            placeholder="Select account"
+            placeholder={t('select_account')}
             fluid
             search
             options={accountDropdown}
@@ -151,10 +154,10 @@ export const ContractAccountsComponent = ({
           <Message header={error} icon="times" content="Error" color="red" />
         )}
         <Button type="submit" color="blue">
-          Add
+          {t('add_button_account')}
         </Button>
         <Link href="/contract">
-          <Button type="button">Back</Button>
+          <Button type="button">{t('back_button')}</Button>
         </Link>
       </Form>
     </>

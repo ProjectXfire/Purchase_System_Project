@@ -5,6 +5,7 @@ import { useMediaQuery } from 'react-responsive'
 import { useRouter } from 'next/router'
 // Providers
 import Cookies from 'js-cookie'
+import { useTranslation } from 'next-i18next'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 // Components
@@ -25,6 +26,7 @@ export const Layout = ({
   const [visible, setVisible] = useState(false)
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
   const router = useRouter()
+  const { t } = useTranslation('common')
 
   const handleVisibleSidebar = () => setVisible(!visible)
 
@@ -69,9 +71,11 @@ export const Layout = ({
       <ModalDropdownComponent
         open={open}
         setOpen={setOpen}
-        headerMessage="Locations"
-        textMessage="Select location"
+        headerMessage={t('locations')}
+        textMessage={t('select_location')}
         secondTextMessage="Select year"
+        acceptButtonText={t('accept_button')}
+        cancelButtonText={t('cancel_button')}
         setVisible={setVisible}
       />
     </>

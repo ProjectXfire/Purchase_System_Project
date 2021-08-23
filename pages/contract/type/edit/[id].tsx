@@ -7,6 +7,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 // Providers
 import { joiResolver } from '@hookform/resolvers/joi'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 // Services
 import { getOneSSR, updateOne } from '@services/apiRequest'
 // Models
@@ -24,7 +25,13 @@ export const getServerSideProps: GetServerSideProps = async (
 ) => {
   const response = await getOneSSR('contract/contracttype/read', ctx)
   return {
-    props: response
+    props: {
+      ...response,
+      ...(await serverSideTranslations(ctx.locale as string, [
+        'menu',
+        'common'
+      ]))
+    }
   }
 }
 

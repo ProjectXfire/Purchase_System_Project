@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 // Providers
 import { Controller, useForm } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
+import { useTranslation } from 'next-i18next'
 // Utils
 import { totalValue } from '@utils/getTotal'
 // Models
@@ -34,6 +35,8 @@ export const BodyRequisitionFormComponent = ({
   productsDropdown: DropdownValues[]
   products: Product[]
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
+
   const [showItemOption, setShowItemOption] = useState({
     material: false,
     others: false,
@@ -184,9 +187,9 @@ export const BodyRequisitionFormComponent = ({
                 <Form.Select
                   fluid
                   search
-                  label="Category"
+                  label={t('category')}
                   options={categoriesDropdown}
-                  placeholder="Select category"
+                  placeholder={t('select_category')}
                   name="itemCategory"
                   value={value}
                   onChange={async (e, { name, value }) => {
@@ -238,9 +241,9 @@ export const BodyRequisitionFormComponent = ({
                     fluid
                     search
                     clearable
-                    label="Material"
+                    label={t('product')}
                     options={productsDropdown}
-                    placeholder="Select material"
+                    placeholder={t('select_product')}
                     name="material"
                     value={value}
                     onChange={async (e: any, { name, value }) => {
@@ -259,8 +262,8 @@ export const BodyRequisitionFormComponent = ({
                 render={({ field: { value } }) => (
                   <Form.Input
                     fluid
-                    label="Others"
-                    placeholder="Services or other materials"
+                    label={t('services&others')}
+                    placeholder={t('services&others')}
                     name="other"
                     value={value || ''}
                     onChange={async (e, { name, value }) => {
@@ -278,8 +281,8 @@ export const BodyRequisitionFormComponent = ({
                 render={({ field: { value } }) => (
                   <Form.Input
                     fluid
-                    label="Description"
-                    placeholder="Description"
+                    label={t('description')}
+                    placeholder={t('description')}
                     name="description"
                     value={value || ''}
                     onChange={async (e, { name, value }) => {
@@ -299,8 +302,8 @@ export const BodyRequisitionFormComponent = ({
                 render={({ field: { value } }) => (
                   <Form.Input
                     fluid
-                    label="Unit Measure"
-                    placeholder="Unit Measure"
+                    label={t('unit_measure')}
+                    placeholder={t('unit_measure')}
                     name="unitMeasure"
                     value={value || ''}
                     onChange={async (e, { name, value }: any) => {
@@ -317,8 +320,8 @@ export const BodyRequisitionFormComponent = ({
               render={({ field: { value } }) => (
                 <Form.Input
                   fluid
-                  label="Price"
-                  placeholder="Price"
+                  label={t('price')}
+                  placeholder={t('price')}
                   name="price"
                   type="number"
                   value={value || 0}
@@ -336,8 +339,8 @@ export const BodyRequisitionFormComponent = ({
               render={({ field: { value } }) => (
                 <Form.Input
                   fluid
-                  label="Quantity"
-                  placeholder="Quantity"
+                  label={t('quantity')}
+                  placeholder={t('quantity')}
                   name="quantity"
                   type="number"
                   value={value || 0}
@@ -358,8 +361,8 @@ export const BodyRequisitionFormComponent = ({
               render={({ field: { value } }) => (
                 <Form.Input
                   fluid
-                  label="Total value"
-                  placeholder="Total value"
+                  label={t('total')}
+                  placeholder={t('total')}
                   name="totalCost"
                   type="number"
                   readOnly={true}
@@ -374,7 +377,7 @@ export const BodyRequisitionFormComponent = ({
           </Form.Group>
         </Segment>
         <Button type="submit" color="blue">
-          Add item
+          {t('add_button_item')}
         </Button>
       </Form>
     </>

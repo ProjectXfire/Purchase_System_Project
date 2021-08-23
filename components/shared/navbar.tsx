@@ -2,6 +2,8 @@
 import React from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 // Styles
@@ -24,6 +26,7 @@ export const NavbarComponent = ({
   openRequisitionModal: () => void
   logout: any
 }): React.ReactElement => {
+  const { t } = useTranslation('menu')
   return (
     <>
       <NavbarContainer>
@@ -31,18 +34,13 @@ export const NavbarComponent = ({
           <Container>
             <Menu.Item header>
               <Icon name="home" />
-              <Link href="/">Purchase System</Link>
+              <Link href="/">{t('home')}</Link>
             </Menu.Item>
             {(permissions.admin ||
               permissions.account_read ||
               permissions.expense_read ||
               permissions.contract_read) && (
-              <Dropdown
-                text="Financial Management"
-                item
-                simple
-                className="link item"
-              >
+              <Dropdown text={t('financial_management')} item simple>
                 <Dropdown.Menu>
                   {(permissions.admin ||
                     permissions.account_read ||
@@ -51,30 +49,30 @@ export const NavbarComponent = ({
                       {(permissions.admin || permissions.account_read) && (
                         <>
                           <Dropdown.Header>
-                            <HeaderBold>Account Management</HeaderBold>
+                            <HeaderBold>{t('account_management')}</HeaderBold>
                           </Dropdown.Header>
                           <Dropdown.Item>
                             <i className="dropdown icon" />
-                            <span className="text">Account</span>
+                            <span className="text">{t('account')}</span>
                             <Dropdown.Menu>
                               <Dropdown.Item>
                                 <Link href="/chartofaccount/account">
-                                  <Anchor>Account</Anchor>
+                                  <Anchor>{t('account')}</Anchor>
                                 </Link>
                               </Dropdown.Item>
                               <Dropdown.Item>
                                 <Link href="/chartofaccount/costcode">
-                                  <Anchor>Cost Code</Anchor>
+                                  <Anchor>{t('costcode')}</Anchor>
                                 </Link>
                               </Dropdown.Item>
                               <Dropdown.Item>
                                 <Link href="/chartofaccount/costtype">
-                                  <Anchor>Cost Type</Anchor>
+                                  <Anchor>{t('costtype')}</Anchor>
                                 </Link>
                               </Dropdown.Item>
                               <Dropdown.Item>
                                 <Link href="/chartofaccount/budget">
-                                  <Anchor>Budget</Anchor>
+                                  <Anchor>{t('budget')}</Anchor>
                                 </Link>
                               </Dropdown.Item>
                             </Dropdown.Menu>
@@ -85,16 +83,16 @@ export const NavbarComponent = ({
                         <>
                           <Dropdown.Item>
                             <i className="dropdown icon" />
-                            <span className="text">Expense</span>
+                            <span className="text">{t('expense')}</span>
                             <Dropdown.Menu>
                               <Dropdown.Item>
                                 <Link href="/expense">
-                                  <Anchor>Expense</Anchor>
+                                  <Anchor>{t('expense')}</Anchor>
                                 </Link>
                               </Dropdown.Item>
                               <Dropdown.Item>
                                 <Link href="/expense/subledger">
-                                  <Anchor>Subledger</Anchor>
+                                  <Anchor>{t('subledger')}</Anchor>
                                 </Link>
                               </Dropdown.Item>
                             </Dropdown.Menu>
@@ -106,27 +104,27 @@ export const NavbarComponent = ({
                   {(permissions.admin || permissions.contract_read) && (
                     <>
                       <Dropdown.Header>
-                        <HeaderBold>Contract Management</HeaderBold>
+                        <HeaderBold>{t('contract_management')}</HeaderBold>
                       </Dropdown.Header>
                       <Dropdown.Item>
                         <i className="dropdown icon" />
-                        <span className="text">Contract</span>
+                        <span className="text">{t('contract')}</span>
                         <Dropdown.Menu>
                           <Dropdown.Item>
                             <Link href="/contract">
-                              <Anchor>Contract</Anchor>
+                              <Anchor>{t('contract')}</Anchor>
                             </Link>
                           </Dropdown.Item>
                           <Dropdown.Item>
                             <Link href="/contract/type">
-                              <Anchor>Type</Anchor>
+                              <Anchor>{t('type')}</Anchor>
                             </Link>
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown.Item>
                       <Dropdown.Item>
                         <Link href="/contract/location">
-                          <Anchor>Location</Anchor>
+                          <Anchor>{t('location')}</Anchor>
                         </Link>
                       </Dropdown.Item>
                     </>
@@ -136,7 +134,7 @@ export const NavbarComponent = ({
             )}
             {(permissions.admin || permissions.req_read) && (
               <Dropdown
-                text="Purchase Management"
+                text={t('purchase_management')}
                 item
                 simple
                 className="link item"
@@ -145,45 +143,45 @@ export const NavbarComponent = ({
                   {(permissions.admin || permissions.req_read) && (
                     <>
                       <Dropdown.Header>
-                        <HeaderBold>Requisition Management</HeaderBold>
+                        <HeaderBold>{t('requisition_management')}</HeaderBold>
                       </Dropdown.Header>
                       <Dropdown.Item onClick={() => openRequisitionModal()}>
-                        Requisition
+                        {t('requisition')}
                       </Dropdown.Item>
                       {(permissions.admin || permissions.approval_read) && (
                         <Dropdown.Item>
                           <Link href="/requisition/approvals/list">
-                            <Anchor>Approvals</Anchor>
+                            <Anchor>{t('approvals')}</Anchor>
                           </Link>
                         </Dropdown.Item>
                       )}
                       <Dropdown.Item>
                         <i className="dropdown icon" />
-                        <span className="text">Options</span>
+                        <span className="text">{t('options')}</span>
                         <Dropdown.Menu>
                           <Dropdown.Item>
                             <Link href="/requisition/shipto">
-                              <Anchor>Ship to</Anchor>
+                              <Anchor>{t('ship_to')}</Anchor>
                             </Link>
                           </Dropdown.Item>
                           <Dropdown.Item>
                             <Link href="/requisition/shipby">
-                              <Anchor>Ship by</Anchor>
+                              <Anchor>{t('ship_by')}</Anchor>
                             </Link>
                           </Dropdown.Item>
                           <Dropdown.Item>
                             <Link href="/requisition/requestor">
-                              <Anchor>Requestor</Anchor>
+                              <Anchor>{t('requestor')}</Anchor>
                             </Link>
                           </Dropdown.Item>
                           <Dropdown.Item>
                             <Link href="/requisition/currency">
-                              <Anchor>Currency</Anchor>
+                              <Anchor>{t('currency')}</Anchor>
                             </Link>
                           </Dropdown.Item>
                           <Dropdown.Item>
                             <Link href="/requisition/priority">
-                              <Anchor>Priority</Anchor>
+                              <Anchor>{t('priority')}</Anchor>
                             </Link>
                           </Dropdown.Item>
                         </Dropdown.Menu>
@@ -193,16 +191,11 @@ export const NavbarComponent = ({
                   {permissions.admin && (
                     <>
                       <Dropdown.Header>
-                        <HeaderBold>Items Management</HeaderBold>
+                        <HeaderBold>{t('items_management')}</HeaderBold>
                       </Dropdown.Header>
                       <Dropdown.Item>
                         <Link href="/inventory/product">
-                          <Anchor>Product</Anchor>
-                        </Link>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <Link href="/inventory/category">
-                          <Anchor>Category</Anchor>
+                          <Anchor>{t('product')}</Anchor>
                         </Link>
                       </Dropdown.Item>
                     </>
@@ -210,9 +203,21 @@ export const NavbarComponent = ({
                 </Dropdown.Menu>
               </Dropdown>
             )}
-            <Menu.Item as="a" position="right" onClick={logout}>
-              Log out
-            </Menu.Item>
+            <Menu.Item icon="log out" position="right" onClick={logout} />
+            <Dropdown item simple icon="world">
+              <Dropdown.Menu>
+                <Dropdown.Item>
+                  <Link href="/" locale={'en'}>
+                    <Anchor>EN</Anchor>
+                  </Link>
+                </Dropdown.Item>
+                <Dropdown.Item>
+                  <Link href="/" locale={'es'}>
+                    <Anchor>ES</Anchor>
+                  </Link>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </Container>
         </Menu>
       </NavbarContainer>
@@ -221,7 +226,7 @@ export const NavbarComponent = ({
           <Container>
             <Menu.Item header>
               <Icon name="home" />
-              <Link href="/">Purchase System</Link>
+              <Link href="/">{t('home')}</Link>
             </Menu.Item>
             <Menu.Item as="a" position="right" onClick={handleVisibleSidebar}>
               <Icon name="sidebar" />

@@ -6,6 +6,8 @@ import Head from 'next/head'
 import { parseCookies } from '@utils/parseCookies'
 import { searchItems } from '@utils/searchItems'
 import { sortColumn } from '@utils/sortColumn'
+// Providers
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 // Context
 import { AppContext } from '@contextProvider/states'
 // Services
@@ -40,7 +42,11 @@ export const getServerSideProps: GetServerSideProps = async (
         token: cookie.token,
         permissions: cookie.permissions,
         locationId: id,
-        year: parseInt(year)
+        year: parseInt(year),
+        ...(await serverSideTranslations(ctx.locale as string, [
+          'menu',
+          'common'
+        ]))
       }
     }
   } catch (error) {
@@ -216,8 +222,6 @@ const RequisitionListByLocationPage = ({
             <ModalDeleteComponent
               showModal={showModal}
               setShowModal={setShowModal}
-              headerText="Delete"
-              message="Are you sure to delete?"
               deleteItemText={selectedItem.itemName}
               deleteAction={deleteItem}
             />

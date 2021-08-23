@@ -1,4 +1,6 @@
 import React, { ChangeEvent, useState } from 'react'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Styles
 import { Modal, Button, Header, TextArea, Form } from 'semantic-ui-react'
 
@@ -17,11 +19,11 @@ export const ModalComponent = ({
   comment?: boolean
   action: (option: string, comment: string) => void
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   const [commentText, setCommentText] = useState('')
   const handleComment = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCommentText(e.target.value)
   }
-
   return (
     <Modal
       open={open}
@@ -50,7 +52,7 @@ export const ModalComponent = ({
               action('ok', commentText)
             }}
           >
-            Accept
+            {t('accept_button')}
           </Button>
         )}
         <Button
@@ -59,7 +61,7 @@ export const ModalComponent = ({
             action('cancel', commentText)
           }}
         >
-          Cancel
+          {t('cancel_button')}
         </Button>
       </Modal.Actions>
     </Modal>

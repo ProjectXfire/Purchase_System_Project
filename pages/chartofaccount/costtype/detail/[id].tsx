@@ -4,6 +4,8 @@ import React, { useEffect } from 'react'
 import Head from 'next/head'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
+// Providers
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 // Services
 import { getOneSSR } from '@services/apiRequest'
 // Models
@@ -20,7 +22,13 @@ export const getServerSideProps: GetServerSideProps = async (
 ) => {
   const response = await getOneSSR('account/costtype/read', ctx)
   return {
-    props: response
+    props: {
+      ...response,
+      ...(await serverSideTranslations(ctx.locale as string, [
+        'menu',
+        'common'
+      ]))
+    }
   }
 }
 

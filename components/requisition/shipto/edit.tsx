@@ -2,6 +2,8 @@
 import React from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Styles
 import { Button, Form, Header, Icon, Label, Message } from 'semantic-ui-react'
 
@@ -27,19 +29,20 @@ export const ShipToEditComponent = ({
   editItem: () => void
   error: string
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
-          Ship To <Header.Subheader>Edit</Header.Subheader>
+          {t('shipto')} <Header.Subheader>{t('edit')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Form onSubmit={validateHandleSubmit(editItem)}>
         <Form.Field>
-          <label>Name</label>
+          <label>{t('name')}</label>
           <input
-            placeholder="Ship to"
+            placeholder={t('name')}
             type="text"
             name="name"
             {...validateRegister('name')}
@@ -53,9 +56,9 @@ export const ShipToEditComponent = ({
           )}
         </Form.Field>
         <Form.Field>
-          <label>Description</label>
+          <label>{t('description')}</label>
           <input
-            placeholder="Ship to description"
+            placeholder={t('description')}
             type="text"
             name="description"
             {...validateRegister('description')}
@@ -77,10 +80,10 @@ export const ShipToEditComponent = ({
           />
         )}
         <Button type="submit" color="blue">
-          Save
+          {t('save_button')}
         </Button>
         <Link href="/requisition/shipto">
-          <Button type="button">Back</Button>
+          <Button type="button">{t('back_button')}</Button>
         </Link>
       </Form>
     </>

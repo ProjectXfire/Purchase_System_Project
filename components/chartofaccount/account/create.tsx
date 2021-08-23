@@ -2,6 +2,8 @@
 import React from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Styles
 import { Button, Header, Icon, Form, Message, Label } from 'semantic-ui-react'
 
@@ -30,20 +32,21 @@ export const AccountCreateComponent = ({
   createItem: (data: Record<string, unknown>) => void
   error: string
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
-          Account <Header.Subheader>Create</Header.Subheader>
+          {t('account')} <Header.Subheader>{t('create')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Form onSubmit={validateHandleSubmit(createItem)}>
         <Form.Field>
           <Form.Select
-            label="Cost Code"
+            label={t('costcode')}
             name="costcode"
-            placeholder="Select cost code"
+            placeholder={t('select_costcode')}
             fluid
             search
             options={dropdownCostCode}
@@ -58,9 +61,9 @@ export const AccountCreateComponent = ({
         </Form.Field>
         <Form.Field>
           <Form.Select
-            label="Cost Type"
+            label={t('costtype')}
             name="costtype"
-            placeholder="Select cost type"
+            placeholder={t('select_costtype')}
             fluid
             search
             options={dropdownCostType}
@@ -75,9 +78,9 @@ export const AccountCreateComponent = ({
         </Form.Field>
         <Form.Field>
           <Form.Select
-            label="Budget"
+            label={t('budget')}
             name="budget"
-            placeholder="Select budget"
+            placeholder={t('select_budget')}
             fluid
             search
             options={dropdownBudget}
@@ -94,10 +97,10 @@ export const AccountCreateComponent = ({
           <Message header={error} icon="times" content="Error" color="red" />
         )}
         <Button type="submit" color="blue">
-          Save
+          {t('save_button')}
         </Button>
         <Link href="/chartofaccount/account">
-          <Button type="button">Back</Button>
+          <Button type="button">{t('back_button')}</Button>
         </Link>
       </Form>
     </>

@@ -30,6 +30,8 @@ export const ModalDropdownComponent = ({
   headerMessage,
   textMessage,
   secondTextMessage,
+  acceptButtonText,
+  cancelButtonText,
   setVisible
 }: {
   open: boolean
@@ -37,6 +39,8 @@ export const ModalDropdownComponent = ({
   headerMessage?: string
   textMessage?: string
   secondTextMessage?: string
+  acceptButtonText?: string
+  cancelButtonText?: string
   setVisible: any
 }): React.ReactElement => {
   const router = useRouter()
@@ -122,10 +126,10 @@ export const ModalDropdownComponent = ({
             />
           </Form.Field>
           <Button type="submit" color="green">
-            Accept
+            {acceptButtonText}
           </Button>
           <Button type="button" color="red" onClick={() => setOpen(false)}>
-            Close
+            {cancelButtonText}
           </Button>
         </Form>
       </Modal.Content>

@@ -1,6 +1,8 @@
 import React, { ChangeEvent } from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Models
 import { Permissions } from '@models/auth/permission.model'
 import { Product } from '@models/inventory/product.model'
@@ -41,12 +43,14 @@ export const ProductListComponent = ({
   setSelectedItem: (value: SelectedItems) => void
   setShowModal: (value: boolean) => void
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2" floated="left">
         <Icon name="suitcase" />
         <Header.Content>
-          Product<Header.Subheader>List</Header.Subheader>
+          {t('product')}
+          <Header.Subheader>{t('list')}</Header.Subheader>
         </Header.Content>
       </Header>
       {permissions.admin && (
@@ -54,7 +58,7 @@ export const ProductListComponent = ({
           <Header.Content>
             <Link href="/inventory/product/create">
               <Button color="blue">
-                <Icon name="plus" /> Add product
+                <Icon name="plus" /> {t('add_button_product')}
               </Button>
             </Link>
           </Header.Content>
@@ -62,7 +66,7 @@ export const ProductListComponent = ({
       )}
       <Input
         icon="search"
-        placeholder="Search..."
+        placeholder={t('search_input')}
         value={searchInputValue}
         onChange={e => handleSearchedValues(e)}
       />
@@ -70,18 +74,18 @@ export const ProductListComponent = ({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell onClick={() => sortByColumn('partNumber')}>
-              <HeaderTitle>Part Number</HeaderTitle>
+              <HeaderTitle>{t('part_number')}</HeaderTitle>
             </Table.HeaderCell>
             <Table.HeaderCell onClick={() => sortByColumn('description')}>
-              <HeaderTitle>Description</HeaderTitle>
+              <HeaderTitle>{t('description')}</HeaderTitle>
             </Table.HeaderCell>
             <Table.HeaderCell onClick={() => sortByColumn('unitMeasure')}>
-              <HeaderTitle>Measure</HeaderTitle>
+              <HeaderTitle>{t('unit_measure')}</HeaderTitle>
             </Table.HeaderCell>
             <Table.HeaderCell onClick={() => sortByColumn('unitPrice')}>
-              <HeaderTitle>Price</HeaderTitle>
+              <HeaderTitle>{t('price')}</HeaderTitle>
             </Table.HeaderCell>
-            <Table.HeaderCell>Actions</Table.HeaderCell>
+            <Table.HeaderCell>{t('actions')}</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>

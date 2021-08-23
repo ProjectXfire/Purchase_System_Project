@@ -2,6 +2,8 @@
 import React from 'react'
 // Next
 import Link from 'next/link'
+// Providers
+import { useTranslation } from 'next-i18next'
 // Styles
 import { Button, Form, Header, Icon, Label, Message } from 'semantic-ui-react'
 
@@ -29,19 +31,20 @@ export const ProductEditComponent = ({
   editItem: () => void
   error: string
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
-          Product <Header.Subheader>Edit</Header.Subheader>
+          {t('Product')} <Header.Subheader>{t('edit')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Form onSubmit={validateHandleSubmit(editItem)}>
         <Form.Field>
-          <label>Part Number</label>
+          <label>{t('part_number')}</label>
           <input
-            placeholder="Currency"
+            placeholder={t('part_number')}
             type="text"
             name="partNumber"
             {...validateRegister('partNumber')}
@@ -55,9 +58,9 @@ export const ProductEditComponent = ({
           )}
         </Form.Field>
         <Form.Field>
-          <label>Description</label>
+          <label>{t('description')}</label>
           <input
-            placeholder="Currency description"
+            placeholder={t('description')}
             type="text"
             name="description"
             {...validateRegister('description')}
@@ -71,9 +74,9 @@ export const ProductEditComponent = ({
           )}
         </Form.Field>
         <Form.Field>
-          <label>Measure</label>
+          <label>{t('unit_measure')}</label>
           <input
-            placeholder="Measure"
+            placeholder={t('unit_measure')}
             type="text"
             name="unitMeasure"
             {...validateRegister('unitMeasure')}
@@ -87,9 +90,9 @@ export const ProductEditComponent = ({
           )}
         </Form.Field>
         <Form.Field>
-          <label>Price</label>
+          <label>{t('price')}</label>
           <input
-            placeholder="Price"
+            placeholder={t('price')}
             type="text"
             name="unitPrice"
             {...validateRegister('unitPrice')}
@@ -111,10 +114,10 @@ export const ProductEditComponent = ({
           />
         )}
         <Button type="submit" color="blue">
-          Save
+          {t('save_button')}
         </Button>
         <Link href="/inventory/product">
-          <Button type="button">Back</Button>
+          <Button type="button">{t('back_button')}</Button>
         </Link>
       </Form>
     </>

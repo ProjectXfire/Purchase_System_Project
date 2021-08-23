@@ -3,6 +3,8 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+// Providers
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 // Utils
 import { searchItems } from '@utils/searchItems'
 import { sortColumn } from '@utils/sortColumn'
@@ -39,7 +41,11 @@ export const getServerSideProps: GetServerSideProps = async (
         permissions: cookie.permissions,
         requisitions: responseRequisitions.data.list,
         pages: responseRequisitions.data.pages,
-        error: ''
+        error: '',
+        ...(await serverSideTranslations(ctx.locale as string, [
+          'menu',
+          'common'
+        ]))
       }
     }
   } catch (error: any) {

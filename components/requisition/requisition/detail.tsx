@@ -4,6 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 // Providers
 import dateformat from 'dateformat'
+import { useTranslation } from 'next-i18next'
 // Models
 import { Requisition } from '@models/requisition/requisition.model'
 // Styles
@@ -14,16 +15,19 @@ import { ItemsListComponent } from '@components/requisition/requisition/items'
 import { totalValue } from '@utils/getTotal'
 
 export const RequisitionDetailComponent = ({
-  requisition
+  requisition,
+  disableButtonBack
 }: {
   requisition: Requisition
+  disableButtonBack?: boolean
 }): React.ReactElement => {
+  const { t } = useTranslation('common')
   return (
     <>
       <Header as="h2">
         <Icon name="suitcase" />
         <Header.Content>
-          Requisition <Header.Subheader>Detail</Header.Subheader>
+          {t('requisition')} <Header.Subheader>{t('detail')}</Header.Subheader>
         </Header.Content>
       </Header>
       <Grid divided="vertically">
@@ -32,15 +36,15 @@ export const RequisitionDetailComponent = ({
             <Table definition size="small">
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell width="3">Nº Req.</Table.Cell>
+                  <Table.Cell width="3">{t('requisition_code')}</Table.Cell>
                   <Table.Cell>{requisition.code}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Location</Table.Cell>
+                  <Table.Cell>{t('location')}</Table.Cell>
                   <Table.Cell>{requisition.location.name}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Description</Table.Cell>
+                  <Table.Cell>{t('description')}</Table.Cell>
                   <Table.Cell>{requisition.description}</Table.Cell>
                 </Table.Row>
               </Table.Body>
@@ -50,13 +54,13 @@ export const RequisitionDetailComponent = ({
             <Table definition size="small">
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell>Date required</Table.Cell>
+                  <Table.Cell>{t('date_required')}</Table.Cell>
                   <Table.Cell>
                     {dateformat(requisition.dateRequired, 'yyyy-mm-dd')}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Observation</Table.Cell>
+                  <Table.Cell>{t('observations')}</Table.Cell>
                   <Table.Cell>{requisition.observation}</Table.Cell>
                 </Table.Row>
               </Table.Body>
@@ -68,17 +72,17 @@ export const RequisitionDetailComponent = ({
       <Grid divided="vertically">
         <Grid.Row columns={2}>
           <Grid.Column>
-            <TitleLabel>Shipment</TitleLabel>
+            <TitleLabel>{t('shipments')}</TitleLabel>
             <Table definition size="small">
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell>Currency</Table.Cell>
+                  <Table.Cell>{t('currency')}</Table.Cell>
                   <Table.Cell>
                     {requisition.currency ? `${requisition.currency.name}` : ''}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Requestor</Table.Cell>
+                  <Table.Cell>{t('requestor')}</Table.Cell>
                   <Table.Cell>
                     {requisition.requestor
                       ? `${requisition.requestor.name}`
@@ -86,11 +90,11 @@ export const RequisitionDetailComponent = ({
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Ship by</Table.Cell>
+                  <Table.Cell>{t('shipby')}</Table.Cell>
                   <Table.Cell>{requisition.shipBy.name}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Ship to</Table.Cell>
+                  <Table.Cell>{t('shipto')}</Table.Cell>
                   <Table.Cell>
                     {requisition.shipTo ? `${requisition.shipTo.name}` : ''}
                   </Table.Cell>
@@ -99,15 +103,15 @@ export const RequisitionDetailComponent = ({
             </Table>
           </Grid.Column>
           <Grid.Column>
-            <TitleLabel>Priority</TitleLabel>
+            <TitleLabel>{t('priority')}</TitleLabel>
             <Table definition size="small">
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell>Priority</Table.Cell>
+                  <Table.Cell>{t('priority')}</Table.Cell>
                   <Table.Cell>{`${requisition.priority.name} ${requisition.priority.description}`}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Justification</Table.Cell>
+                  <Table.Cell>{t('justify')}</Table.Cell>
                   <Table.Cell>{requisition.priorityJustification}</Table.Cell>
                 </Table.Row>
               </Table.Body>
@@ -119,11 +123,11 @@ export const RequisitionDetailComponent = ({
       <Grid divided="vertically">
         <Grid.Row columns={2}>
           <Grid.Column>
-            <TitleLabel>Contract</TitleLabel>
+            <TitleLabel>{t('contract')}</TitleLabel>
             <Table definition size="small">
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell width="3">Contract</Table.Cell>
+                  <Table.Cell width="3">{t('contract')}</Table.Cell>
                   <Table.Cell>
                     {requisition.contract
                       ? `${requisition.contract.name} ${requisition.contract.description}`
@@ -131,7 +135,7 @@ export const RequisitionDetailComponent = ({
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell width="3">Type</Table.Cell>
+                  <Table.Cell width="3">{t('contract_type')}</Table.Cell>
                   <Table.Cell>
                     {requisition.contract
                       ? `${requisition.contract.contractType.name}`
@@ -139,7 +143,7 @@ export const RequisitionDetailComponent = ({
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Area Unit</Table.Cell>
+                  <Table.Cell>{t('area_unit')}</Table.Cell>
                   <Table.Cell>
                     {requisition.contract
                       ? `${requisition.contract.areaUnit} ${requisition.contract.areaUnitDescription}`
@@ -147,7 +151,7 @@ export const RequisitionDetailComponent = ({
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Account</Table.Cell>
+                  <Table.Cell>{t('account')}</Table.Cell>
                   <Table.Cell>
                     {requisition.account
                       ? `${requisition.account.costcode.name} ${requisition.account.costcode.description} -
@@ -160,11 +164,11 @@ export const RequisitionDetailComponent = ({
             </Table>
           </Grid.Column>
           <Grid.Column>
-            <TitleLabel>Expense</TitleLabel>
+            <TitleLabel>{t('expense')}</TitleLabel>
             <Table definition size="small">
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell width="3">Expense</Table.Cell>
+                  <Table.Cell width="3">{t('expense')}</Table.Cell>
                   <Table.Cell>
                     {requisition.expense
                       ? `${requisition.expense.name} ${requisition.expense.description}`
@@ -172,7 +176,7 @@ export const RequisitionDetailComponent = ({
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Cost Type</Table.Cell>
+                  <Table.Cell>{t('costtype')}</Table.Cell>
                   <Table.Cell>
                     {requisition.costtype
                       ? `${requisition.costtype.name} - ${requisition.costtype.description}`
@@ -180,7 +184,7 @@ export const RequisitionDetailComponent = ({
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Subledger</Table.Cell>
+                  <Table.Cell>{t('subledger')}</Table.Cell>
                   <Table.Cell>
                     {requisition.subledger
                       ? `${requisition.subledger.name} - ${requisition.subledger.description}`
@@ -196,26 +200,26 @@ export const RequisitionDetailComponent = ({
       <Grid divided="vertically">
         <Grid.Row columns={2}>
           <Grid.Column>
-            <TitleLabel>Originator</TitleLabel>
+            <TitleLabel>{t('created_by')}</TitleLabel>
             <Table definition size="small">
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell width="3">Created by</Table.Cell>
+                  <Table.Cell width="3">{t('created_by')}</Table.Cell>
                   <Table.Cell>{requisition.createdBy}</Table.Cell>
                 </Table.Row>
                 <Table.Row warning>
-                  <Table.Cell>Status</Table.Cell>
+                  <Table.Cell>{t('user_status')}</Table.Cell>
                   <Table.Cell>{requisition.createdByStatus}</Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>
           </Grid.Column>
           <Grid.Column>
-            <TitleLabel>Approval</TitleLabel>
+            <TitleLabel>{t('approver')}</TitleLabel>
             <Table definition size="small">
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell width="3">Approved by</Table.Cell>
+                  <Table.Cell width="3">{t('approver_by')}</Table.Cell>
                   <Table.Cell>
                     {requisition.approvedBy
                       ? `${requisition.approvedBy.email}`
@@ -223,7 +227,7 @@ export const RequisitionDetailComponent = ({
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row warning>
-                  <Table.Cell>Status</Table.Cell>
+                  <Table.Cell>{t('approval_status')}</Table.Cell>
                   <Table.Cell>
                     {requisition.approvedByStatus
                       ? `${requisition.approvedByStatus}`
@@ -231,7 +235,7 @@ export const RequisitionDetailComponent = ({
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row warning>
-                  <Table.Cell>Approval date</Table.Cell>
+                  <Table.Cell>{t('approval_date')}</Table.Cell>
                   <Table.Cell>
                     {requisition.approvedByDate
                       ? `${dateformat(
@@ -252,11 +256,13 @@ export const RequisitionDetailComponent = ({
         showActionsButton={false}
         totalOrder={totalValue(requisition.items)}
       />
-      <Link
-        href={`/requisition/${requisition.location._id}?year=${requisition.year}`}
-      >
-        <Button type="button">Back</Button>
-      </Link>
+      {!disableButtonBack && (
+        <Link
+          href={`/requisition/${requisition.location._id}?year=${requisition.year}`}
+        >
+          <Button type="button">{t('back_button')}</Button>
+        </Link>
+      )}
     </>
   )
 }
