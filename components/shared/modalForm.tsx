@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 // Providers
 import { Controller, useForm } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
-import { useTranslation } from 'next-i18next'
 // Styles
 import { Modal, Button, Header, Form, Segment } from 'semantic-ui-react'
 // Models
@@ -34,8 +33,6 @@ export const ModalFormComponent = ({
   products: Product[]
   action: (values: any) => void
 }): React.ReactElement => {
-  const { t } = useTranslation('common')
-
   // SET SCHEMA TO VALIDATE FORM
   const {
     formState: { errors },

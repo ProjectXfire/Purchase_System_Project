@@ -34,22 +34,12 @@ export const getListSSR = async (
     const id = params && params.id ? (params.id as string) : ''
     cookie = parseCookies(ctx)
     const response = await getList(path, cookie.token, id)
-    if (!id) {
-      return {
-        user: cookie.user,
-        token: cookie.token,
-        permissions: cookie.permissions,
-        data: response.data.list,
-        pages: response.data.pages,
-        error: ''
-      }
-    }
     return {
       user: cookie.user,
       token: cookie.token,
       permissions: cookie.permissions,
-      data: response.data,
-      pages: 0,
+      data: response.data.list,
+      pages: response.data.pages,
       error: ''
     }
   } catch (error: any) {
