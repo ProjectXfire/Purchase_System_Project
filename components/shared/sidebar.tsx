@@ -159,6 +159,20 @@ export const SidebarComponent = ({
           </Dropdown.Menu>
         </Dropdown>
       )}
+      <Dropdown item icon="world">
+        <Dropdown.Menu>
+          <Dropdown.Item>
+            <Link href="/" locale={'en-US'}>
+              <Anchor>EN</Anchor>
+            </Link>
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <Link href="/" locale={'es'}>
+              <Anchor>ES</Anchor>
+            </Link>
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
       <Menu.Item as="a" onClick={logout}>
         <Icon name="log out" />
         Log out

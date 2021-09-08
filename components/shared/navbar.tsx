@@ -207,7 +207,7 @@ export const NavbarComponent = ({
             <Dropdown item simple icon="world">
               <Dropdown.Menu>
                 <Dropdown.Item>
-                  <Link href="/" locale={'en'}>
+                  <Link href="/" locale={'en-US'}>
                     <Anchor>EN</Anchor>
                   </Link>
                 </Dropdown.Item>
